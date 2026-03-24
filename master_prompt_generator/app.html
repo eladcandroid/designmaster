@@ -1,0 +1,3070 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Blueprint Builder</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap");
+
+    :root {
+      --bg: #f2f7fb;
+      --card: #ffffff;
+      --line: #d5deea;
+      --text: #1f2937;
+      --muted: #526075;
+      --accent: #0f766e;
+      --accent-2: #0e9f92;
+      --danger: #b42318;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: transparent;
+    }
+
+    .wrap {
+      max-width: 1040px;
+      margin: 28px auto;
+      padding: 0 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 42px rgba(2, 6, 23, 0.08);
+    }
+
+    .hero {
+      padding: 26px;
+      background: linear-gradient(135deg, #115e59 0%, #0e9f92 100%);
+      color: #ffffff;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: 0.2px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      font-size: 0.95rem;
+      opacity: 0.96;
+    }
+
+    .progress-wrap {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #e4ecf7;
+      overflow: hidden;
+    }
+
+    .bar > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 220ms ease;
+    }
+
+    form {
+      padding: 20px 24px 26px;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .step h2 {
+      margin: 0;
+      font-size: 1.16rem;
+    }
+
+    .sub {
+      margin: 6px 0 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid.one { grid-template-columns: 1fr; }
+
+    .box {
+      border: 1px solid #dce5f1;
+      border-radius: 12px;
+      background: #fbfdff;
+      padding: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .hint {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #c9d5e4;
+      border-radius: 10px;
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 94px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid #99e9df;
+      border-color: #37b6a6;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid #d3dfed;
+      background: #fbfdff;
+      border-radius: 12px;
+    }
+
+    .options.cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .opt {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 0.91rem;
+      font-weight: 500;
+    }
+
+    .opt input { margin-top: 2px; }
+
+    .conditional-block {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px dashed #bed0e8;
+      border-radius: 12px;
+      background: #f9fbff;
+      display: none;
+    }
+
+    .error {
+      display: none;
+      margin-top: 10px;
+      color: var(--danger);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .nav {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: #e8eff9;
+      color: #1f2937;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover { background: #0d5e58; }
+
+    #resultWrap {
+      display: none;
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    #masterPrompt {
+      min-height: 360px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      background: #f8fbff;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .toolbar {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .score-card {
+      border: 1px solid #d5deea;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 10px;
+    }
+
+    .score-card strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+
+    .risk-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .review-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .review-item {
+      border: 1px solid #dce5f1;
+      border-radius: 10px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .review-item .meta {
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-top: 4px;
+    }
+
+
+    .intake-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .intake-main {
+      min-width: 0;
+    }
+
+    .compiler-summary {
+      position: sticky;
+      top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      background: rgba(14, 21, 49, 0.75);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .compiler-summary h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+
+    .compiler-presets {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .compiler-presets .btn-secondary {
+      font-size: 0.8rem;
+      padding: 8px 10px;
+    }
+
+    .summary-item span.pending {
+      color: rgba(237, 243, 255, 0.68);
+      font-style: italic;
+    }
+
+    .summary-item span.warn {
+      color: #fecaca;
+    }
+
+    .summary-item span.ok {
+      color: #86efac;
+    }
+
+
+    .summary-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 4px;
+    }
+
+    .summary-actions .btn-secondary {
+      font-size: 0.76rem;
+      padding: 7px 10px;
+    }
+
+    .summary-toggle {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: rgba(8, 14, 36, 0.75);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .summary-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .summary-group.collapsed {
+      display: none;
+    }
+
+    .required-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 5px;
+      min-height: 18px;
+    }
+
+    .required-badge {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: rgba(8, 14, 36, 0.7);
+      white-space: nowrap;
+    }
+
+    .required-badge.pending {
+      border-color: rgba(252, 165, 165, 0.65);
+      color: #fecaca;
+    }
+
+    .required-badge.ok {
+      border-color: rgba(134, 239, 172, 0.7);
+      color: #86efac;
+    }
+
+    /* Global white text across form + results */
+    #intakeForm,
+    #intakeForm * {
+      color: #ffffff;
+    }
+
+    #intakeForm input,
+    #intakeForm select,
+    #intakeForm textarea,
+    #resultWrap textarea,
+    #masterPrompt {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff;
+    }
+
+    #intakeForm input::placeholder,
+    #intakeForm textarea::placeholder,
+    #masterPrompt::placeholder {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-secondary,
+    .btn-secondary:hover {
+      color: #ffffff;
+    }
+
+    .summary-item {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 8px;
+      display: grid;
+      gap: 4px;
+      background: rgba(8, 14, 36, 0.58);
+    }
+
+    .summary-item strong {
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(219, 234, 254, 0.88);
+    }
+
+    .summary-item span {
+      font-size: 0.88rem;
+      color: #edf3ff;
+      white-space: pre-line;
+    }
+
+    .field-hint {
+      display: block;
+      margin-top: 5px;
+      min-height: 16px;
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+
+    .required-hint {
+      color: #fca5a5;
+    }
+
+    .input-required-missing {
+      border-color: #fca5a5 !important;
+      outline: 2px solid rgba(252, 165, 165, 0.35) !important;
+    }
+
+    .hero-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .mode-toggle {
+      min-width: 280px;
+      max-width: 420px;
+      margin-top: 14px;
+    }
+
+    .mode-toggle label {
+      margin-bottom: 4px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      color: #ecf3ff;
+    }
+
+    .mode-toggle select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(8, 14, 38, 0.58);
+      color: #ecf3ff;
+    }
+
+    body {
+      font-family: "Nunito Sans", "Segoe UI", sans-serif;
+      background: #070b1e;
+    }
+
+    .card {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 30px 68px rgba(2, 6, 23, 0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #143f7a 0%, #5b3ccf 52%, #15b9d3 100%);
+    }
+
+    .progress-wrap {
+      background: rgba(7, 12, 33, 0.62);
+    }
+
+    .bar {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .bar > span {
+      background: linear-gradient(90deg, #39e5ff, #6a6cff, #8f6bff);
+    }
+
+    .step h2,
+    label {
+      color: #edf3ff;
+    }
+
+    .sub,
+    .muted,
+    .progress-meta,
+    .hint,
+    .review-item .meta,
+    .risk-list {
+      color: rgba(234, 242, 255, 0.76);
+    }
+
+    .box,
+    .options,
+    .conditional-block,
+    .score-card,
+    .review-item {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(14, 21, 49, 0.7);
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="date"],
+    select,
+    textarea {
+      background: rgba(8, 14, 36, 0.72);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #ecf3ff;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid rgba(114, 200, 255, 0.45);
+      border-color: rgba(114, 200, 255, 0.85);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.14);
+      color: #edf3ff;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #39e5ff, #6a6cff, #8f6bff);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #21d8f8, #595fff, #7f59f2);
+    }
+
+    #resultWrap {
+      border-top-color: rgba(255, 255, 255, 0.18);
+    }
+
+    #masterPrompt {
+      background: rgba(8, 14, 36, 0.78);
+    }
+
+    select option {
+      background: #0b122d;
+      color: #ffffff;
+    }
+
+    .submission-meta {
+      margin-top: 10px;
+      border: 1px solid rgba(114, 200, 255, 0.42);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(20, 34, 78, 0.88) 0%, rgba(30, 26, 86, 0.78) 50%, rgba(17, 64, 108, 0.78) 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 24px rgba(2, 6, 23, 0.35);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .submission-status {
+      color: #ecf3ff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .share-link-row {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .share-link-row a {
+      color: #7dd3fc;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    .share-link-row .btn-secondary {
+      background: linear-gradient(90deg, rgba(57, 229, 255, 0.22), rgba(106, 108, 255, 0.22), rgba(143, 107, 255, 0.22));
+      border-color: rgba(114, 200, 255, 0.52);
+    }
+
+    @media (max-width: 800px) {
+      .hero-row {
+        align-items: stretch;
+      }
+
+      .mode-toggle {
+        min-width: 100%;
+      }
+
+      .intake-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .compiler-summary {
+        position: static;
+      }
+
+      .compiler-presets .btn-secondary {
+        width: 100%;
+      }
+
+      .grid,
+      .options.cols,
+      .diag-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wrap { margin: 16px auto; }
+      .hero h1 { font-size: 1.28rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero">
+        <div class="hero-row">
+          <div>
+            <h1>Website Blueprint Builder</h1>
+          </div>
+          <div class="mode-toggle">
+            <label for="promptMode">Where will you use this prompt?</label>
+            <select id="promptMode" aria-label="Prompt output mode">
+              <option value="chatgpt">ChatGPT (guided step-by-step output)</option>
+              <option value="codex">Codex (full build output)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+        <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="stepLabel">Step 1 of 13</span>
+          <span id="stepTitle">Compiler Configuration</span>
+        </div>
+        <div class="bar"><span id="progressBar"></span></div>
+        <div class="toolbar">
+          <span class="muted" id="draftStatus" aria-live="polite"></span>
+          <button type="button" class="btn-secondary" id="resumeDraftBtn">Resume Draft</button>
+          <button type="button" class="btn-secondary" id="clearDraftBtn">Clear Draft</button>
+          <button type="button" class="btn-secondary" id="demoFillBtn">Demo Autofill</button>
+        </div>
+      </div>
+
+      <form id="intakeForm" novalidate>
+        <div class="intake-layout">
+          <aside class="compiler-summary" id="compilerSummary" aria-live="polite">
+            <h3>Scope Summary</h3>
+            <p class="hint">Live compiler output based on your current selections.</p>
+            <div class="summary-actions">
+              <button type="button" class="btn-secondary" id="copyCompilerConfigBtn">Copy Config JSON</button>
+            </div>
+
+            <button type="button" class="summary-toggle" data-summary-toggle="core" aria-expanded="true">Compiler Core</button>
+            <div class="summary-group" data-summary-group="core">
+              <div class="summary-item"><strong>Dynamic role</strong><span id="sumDynamicRole">Pending</span></div>
+              <div class="summary-item"><strong>Build mode</strong><span id="sumBuildMode">Pending</span></div>
+              <div class="summary-item"><strong>Scope constraints</strong><span id="sumScope">Pending</span></div>
+              <div class="summary-item"><strong>Integration constraints</strong><span id="sumIntegration">Pending</span></div>
+            </div>
+
+            <button type="button" class="summary-toggle" data-summary-toggle="strategy" aria-expanded="true">Strategy Signals</button>
+            <div class="summary-group" data-summary-group="strategy">
+              <div class="summary-item"><strong>Architectural intent</strong><span id="sumIntent">Pending</span></div>
+              <div class="summary-item"><strong>Conflict notice</strong><span id="sumConflicts">None</span></div>
+            </div>
+          </aside>
+          <div class="intake-main">
+        <section class="step active" data-step-id="compiler" data-title="Start Here">
+          <h2>Step 1 - Start Here (Required)</h2>
+          <p class="sub">Pick one option in each field below. This sets your build type and output format.</p>
+          <div class="box" style="margin-bottom:12px;">
+            <h3>Quick Setup</h3>
+            <span class="hint">Simple rule: choose the closest option. You can refine details in later steps.</span>
+            <div class="grid">
+              <div>
+                <label for="project_archetype">What type of website are you building?</label>
+                <select id="project_archetype" name="project_archetype">
+                  <option value="">Select</option>
+                  <option value="ecommerce">Online Store (ecommerce)</option>
+                  <option value="saas">Software Product (saas)</option>
+                  <option value="portfolio">Portfolio / Personal Site</option>
+                  <option value="local_business">Local Business Site</option>
+                  <option value="content_platform">Content / Blog Platform</option>
+                  <option value="hybrid">Hybrid (mix of models)</option>
+                </select>
+                <span class="hint">Example: choose Local Business if your main goal is leads/bookings.</span>
+                <div class="required-row"><span class="required-badge pending" data-required-badge="project_archetype">Missing</span><span class="field-hint required-hint" data-required-field="project_archetype"></span></div>
+              </div>
+              <div>
+                <label for="delivery_mode">How should this be built?</label>
+                <select id="delivery_mode" name="delivery_mode">
+                  <option value="">Select</option>
+                  <option value="static_prototype">Static Prototype (no CMS)</option>
+                  <option value="wordpress_theme">WordPress Theme</option>
+                  <option value="react_app">React App</option>
+                  <option value="headless_frontend">Headless Frontend</option>
+                  <option value="architecture_only">Architecture Plan Only</option>
+                </select>
+                <span class="hint">Choose WordPress Theme if your final site will run in WordPress.</span>
+                <div class="required-row"><span class="required-badge pending" data-required-badge="delivery_mode">Missing</span><span class="field-hint required-hint" data-required-field="delivery_mode"></span></div>
+              </div>
+              <div>
+                <label for="output_engine">Which AI should generate the output?</label>
+                <select id="output_engine" name="output_engine">
+                  <option value="">Select</option>
+                  <option value="chatgpt">ChatGPT</option>
+                  <option value="codex">Codex</option>
+                </select>
+                <span class="hint">This controls how the final prompt is formatted.</span>
+                <div class="required-row"><span class="required-badge pending" data-required-badge="output_engine">Missing</span><span class="field-hint required-hint" data-required-field="output_engine"></span></div>
+              </div>
+              <div>
+                <label for="scope_preference">How detailed should this build be?</label>
+                <select id="scope_preference" name="scope_preference">
+                  <option value="">Select</option>
+                  <option value="mvp">MVP (lean first version)</option>
+                  <option value="standard">Standard (balanced scope)</option>
+                  <option value="production_spec">Production Spec (full detail)</option>
+                </select>
+                <span class="hint">If unsure, choose Standard.</span>
+                <div class="required-row"><span class="required-badge pending" data-required-badge="scope_preference">Missing</span><span class="field-hint required-hint" data-required-field="scope_preference"></span></div>
+              </div>
+              <div>
+                <label for="integration_mode">How many integrations do you expect?</label>
+                <select id="integration_mode" name="integration_mode">
+                  <option value="">Select</option>
+                  <option value="basic">Basic (few integrations)</option>
+                  <option value="moderate">Moderate (several systems)</option>
+                  <option value="complex">Complex (many connected systems)</option>
+                </select>
+                <span class="hint">The tool always uses safe placeholders, never real keys.</span>
+                <div class="required-row"><span class="required-badge pending" data-required-badge="integration_mode">Missing</span><span class="field-hint required-hint" data-required-field="integration_mode"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="compiler-presets" aria-label="Compiler presets">
+            <button type="button" class="btn-secondary" data-compiler-preset="ecom_mvp">Preset: Ecommerce MVP</button>
+            <button type="button" class="btn-secondary" data-compiler-preset="saas_prod">Preset: SaaS Production</button>
+            <button type="button" class="btn-secondary" data-compiler-preset="portfolio_spec">Preset: Portfolio Spec</button>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="identity" data-title="About Your Business">
+          <h2>Step 2 - About Your Business</h2>
+          <p class="sub">What this asks: your business type. Why it matters: it controls which follow-up questions and recommendations you get.</p>
+          <div class="options cols">
+            <label class="opt"><input type="radio" name="user_type" value="local_business" />Local Business</label>
+            <label class="opt"><input type="radio" name="user_type" value="ecommerce" />E-commerce Brand</label>
+            <label class="opt"><input type="radio" name="user_type" value="freelancer" />Freelancer / Consultant</label>
+            <label class="opt"><input type="radio" name="user_type" value="blogger" />Blogger</label>
+            <label class="opt"><input type="radio" name="user_type" value="influencer" />Influencer / Creator</label>
+            <label class="opt"><input type="radio" name="user_type" value="saas" />SaaS / App</label>
+            <label class="opt"><input type="radio" name="user_type" value="nonprofit" />Nonprofit</label>
+            <label class="opt"><input type="radio" name="user_type" value="personal_brand" />Personal Brand</label>
+            <label class="opt"><input type="radio" name="user_type" value="portfolio" />Portfolio / Artist</label>
+            <label class="opt"><input type="radio" name="user_type" value="community" />Community / Membership</label>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="goal" data-title="Main Goal">
+          <h2>Step 3 - Main Goal</h2>
+          <p class="sub">What this asks: your top outcome. Why it matters: your goal sets page priorities, CTA strategy, and growth direction.</p>
+          <div class="options cols">
+            <label class="opt"><input type="radio" name="primary_goal" value="revenue" />Revenue</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="lead_generation" />Lead Generation</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="authority" />Authority</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="audience_growth" />Audience Growth</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="portfolio_visibility" />Portfolio Visibility</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="community" />Community</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="fundraising" />Fundraising</label>
+            <label class="opt"><input type="radio" name="primary_goal" value="product_launch" />Product Launch</label>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="monetization" data-title="How You Make Money">
+          <h2>Step 4 - How You Make Money</h2>
+          <p class="sub">What this asks: your revenue sources. Why it matters: it determines offer pages, checkout flow, and conversion strategy.</p>
+          <div class="options cols">
+            <label class="opt"><input type="checkbox" name="revenue_model" value="services" />Services</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="physical_products" />Physical products</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="digital_products" />Digital products</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="courses" />Courses</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="affiliate_income" />Affiliate income</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="ads" />Ads</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="brand_partnerships" />Brand partnerships</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="subscription" />Subscription</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="saas" />SaaS</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="donations" />Donations</label>
+            <label class="opt"><input type="checkbox" name="revenue_model" value="not_monetizing_yet" />Not monetizing yet</label>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="audience" data-title="Target Audience">
+          <h2>Step 5 - Target Audience</h2>
+          <p class="sub">What this asks: who you serve and what they need. Why it matters: better targeting leads to clearer messaging and stronger conversion.</p>
+          <div class="grid">
+            <div class="box" style="grid-column:1/-1;">
+              <label for="audience_sentence">Describe your ideal audience in one sentence</label>
+              <textarea id="audience_sentence" name="audience_sentence"></textarea>
+            </div>
+            <div><label for="age_range">Age range</label><input id="age_range" name="age_range" type="text" /></div>
+            <div><label for="audience_geo">Geographic focus</label><input id="audience_geo" name="audience_geo" type="text" /></div>
+            <div><label for="income_range">Income range</label><input id="income_range" name="income_range" type="text" /></div>
+            <div>
+              <label for="skill_level">Skill level</label>
+              <select id="skill_level" name="skill_level">
+                <option value="">Select</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+            <div class="box" style="grid-column:1/-1;">
+              <label for="pain_points">Top 3 pain points</label>
+              <textarea id="pain_points" name="pain_points"></textarea>
+            </div>
+            <div class="box" style="grid-column:1/-1;">
+              <label for="desired_outcomes">Top 3 desired outcomes</label>
+              <textarea id="desired_outcomes" name="desired_outcomes"></textarea>
+            </div>
+            <div class="box" style="grid-column:1/-1;">
+              <label for="why_choose_you">Why would they choose you over others?</label>
+              <textarea id="why_choose_you" name="why_choose_you"></textarea>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="content" data-title="Content Plan">
+          <h2>Step 6 - Content Plan</h2>
+          <p class="sub">What this asks: how you plan to publish content. Why it matters: this shapes SEO structure, publishing workflow, and lead capture paths.</p>
+          <div class="grid">
+            <div>
+              <label for="primary_content_format">Primary content format</label>
+              <select id="primary_content_format" name="primary_content_format">
+                <option value="">Select</option>
+                <option value="blog">Blog</option>
+                <option value="video">Video</option>
+                <option value="podcast">Podcast</option>
+                <option value="newsletter">Newsletter</option>
+                <option value="mixed">Mixed</option>
+              </select>
+            </div>
+            <div><label for="posting_frequency">Posting frequency</label><input id="posting_frequency" name="posting_frequency" type="text" placeholder="e.g. 2x weekly" /></div>
+          </div>
+          <div class="options cols" style="margin-top:12px;">
+            <label class="opt"><input type="checkbox" name="content_features" value="pillar_cluster_seo" />Pillar + cluster SEO structure</label>
+            <label class="opt"><input type="checkbox" name="content_features" value="evergreen_library" />Evergreen resource library</label>
+            <label class="opt"><input type="checkbox" name="content_features" value="category_archive" />Category-based archive</label>
+            <label class="opt"><input type="checkbox" name="content_features" value="gated_premium" />Gated premium content</label>
+            <label class="opt"><input type="checkbox" name="content_features" value="lead_magnets" />Downloadable lead magnets</label>
+          </div>
+
+          <div class="conditional-block" data-user-types="blogger">
+            <h3>Blogger-Specific</h3>
+            <div class="grid">
+              <div><label for="blogger_traffic_goal">Target monthly traffic goal</label><input id="blogger_traffic_goal" name="blogger_traffic_goal" type="text" /></div>
+              <div><label for="blogger_seo_strategy">SEO keyword strategy needed?</label><select id="blogger_seo_strategy" name="blogger_seo_strategy"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+
+          <div class="conditional-block" data-user-types="influencer">
+            <h3>Influencer-Specific</h3>
+            <div class="options cols">
+              <label class="opt"><input type="checkbox" name="influencer_features" value="media_kit_page" />Media kit page</label>
+              <label class="opt"><input type="checkbox" name="influencer_features" value="brand_collab_intake" />Brand collaboration intake form</label>
+              <label class="opt"><input type="checkbox" name="influencer_features" value="social_link_hub" />Social link hub</label>
+              <label class="opt"><input type="checkbox" name="influencer_features" value="affiliate_tracking_pages" />Affiliate tracking pages</label>
+            </div>
+          </div>
+
+          <div class="conditional-block" data-user-types="saas">
+            <h3>SaaS Content Layer</h3>
+            <div class="options cols">
+              <label class="opt"><input type="checkbox" name="saas_content_features" value="knowledge_base" />Knowledge base</label>
+              <label class="opt"><input type="checkbox" name="saas_content_features" value="documentation_portal" />Documentation portal</label>
+              <label class="opt"><input type="checkbox" name="saas_content_features" value="feature_comparison_pages" />Feature comparison pages</label>
+              <label class="opt"><input type="checkbox" name="saas_content_features" value="roadmap_page" />Roadmap page</label>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="offer" data-title="Offer Setup">
+          <h2>Step 7 - Offer Setup</h2>
+          <p class="sub">What this asks: how your services/products are packaged. Why it matters: offer clarity directly impacts trust and conversion.</p>
+
+          <div class="conditional-block" data-user-types="freelancer local_business">
+            <h3>Freelancer / Local Business Offer Structure</h3>
+            <div class="grid">
+              <div style="grid-column:1/-1;"><label for="services_list">List services</label><textarea id="services_list" name="services_list"></textarea></div>
+              <div><label for="services_separate_pages">Services require separate pages?</label><select id="services_separate_pages" name="services_separate_pages"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="pricing_displayed">Pricing displayed?</label><select id="pricing_displayed" name="pricing_displayed"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="service_packages">Offer packages?</label><select id="service_packages" name="service_packages"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="qualification_before_booking">Qualification before booking?</label><select id="qualification_before_booking" name="qualification_before_booking"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="want_case_studies">Want case studies?</label><select id="want_case_studies" name="want_case_studies"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+
+          <div class="conditional-block" data-user-types="ecommerce">
+            <h3>E-commerce Offer Structure</h3>
+            <div class="grid">
+              <div><label for="product_count">Estimated product count</label><input id="product_count" name="product_count" type="text" /></div>
+              <div><label for="product_categories">Categories needed</label><input id="product_categories" name="product_categories" type="text" /></div>
+              <div><label for="subscription_products">Subscription products?</label><select id="subscription_products" name="subscription_products"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="inventory_tracking">Inventory tracking?</label><select id="inventory_tracking" name="inventory_tracking"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="upsell_cross_sell_system">Upsell / cross-sell?</label><select id="upsell_cross_sell_system" name="upsell_cross_sell_system"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="customer_account_area">Customer account area?</label><select id="customer_account_area" name="customer_account_area"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="product_reviews">Reviews?</label><select id="product_reviews" name="product_reviews"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+
+          <div class="conditional-block" data-user-types="saas">
+            <h3>SaaS Offer Structure</h3>
+            <div class="grid">
+              <div><label for="pricing_tiers">Pricing tiers?</label><input id="pricing_tiers" name="pricing_tiers" type="text" /></div>
+              <div><label for="free_trial">Free trial?</label><select id="free_trial" name="free_trial"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="demo_booking">Demo booking?</label><select id="demo_booking" name="demo_booking"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="feature_breakdown_depth">Feature breakdown depth</label><input id="feature_breakdown_depth" name="feature_breakdown_depth" type="text" /></div>
+              <div><label for="comparison_table_needed">Comparison table needed?</label><select id="comparison_table_needed" name="comparison_table_needed"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="onboarding_walkthrough_page">Onboarding walkthrough page?</label><select id="onboarding_walkthrough_page" name="onboarding_walkthrough_page"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+
+          <div class="conditional-block" data-user-types="nonprofit">
+            <h3>Nonprofit Offer Structure</h3>
+            <div class="grid">
+              <div><label for="donation_system">Donation system?</label><select id="donation_system" name="donation_system"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="recurring_donations">Recurring donations?</label><select id="recurring_donations" name="recurring_donations"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="volunteer_form">Volunteer application form?</label><select id="volunteer_form" name="volunteer_form"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="event_pages">Event pages?</label><select id="event_pages" name="event_pages"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="impact_reporting_page">Impact reporting page?</label><select id="impact_reporting_page" name="impact_reporting_page"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="funnel" data-title="Lead Flow & Conversion">
+          <h2>Step 8 - Lead Flow & Conversion</h2>
+          <p class="sub">What this asks: what action users should take first and next. Why it matters: this defines your funnel path and CTA hierarchy.</p>
+          <div class="grid">
+            <div>
+              <label for="primary_cta">Primary CTA</label>
+              <select id="primary_cta" name="primary_cta">
+                <option value="">Select</option>
+                <option value="book_call">Book Call</option>
+                <option value="buy_now">Buy Now</option>
+                <option value="subscribe">Subscribe</option>
+                <option value="join">Join</option>
+                <option value="apply">Apply</option>
+                <option value="donate">Donate</option>
+                <option value="download">Download</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div><label for="secondary_cta">Secondary CTA</label><input id="secondary_cta" name="secondary_cta" type="text" /></div>
+          </div>
+
+          <div class="options cols" style="margin-top:12px;">
+            <label class="opt"><input type="checkbox" name="lead_capture" value="email_newsletter" />Email newsletter</label>
+            <label class="opt"><input type="checkbox" name="lead_capture" value="free_resource" />Free resource</label>
+            <label class="opt"><input type="checkbox" name="lead_capture" value="discount" />Discount</label>
+            <label class="opt"><input type="checkbox" name="lead_capture" value="webinar" />Webinar</label>
+            <label class="opt"><input type="checkbox" name="lead_capture" value="none" />None</label>
+          </div>
+
+          <div class="conditional-block" id="emailCaptureBlock">
+            <h3>Email Capture Automation</h3>
+            <div class="grid">
+              <div><label for="email_platform">Which platform?</label><input id="email_platform" name="email_platform" type="text" /></div>
+              <div><label for="email_automation_needed">Automation needed?</label><select id="email_automation_needed" name="email_automation_needed"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+
+          <div class="box" style="margin-top:12px;">
+            <label>Trust builders</label>
+            <div class="options cols" style="margin-top:8px;">
+              <label class="opt"><input type="checkbox" name="trust_builders" value="testimonials" />Testimonials</label>
+              <label class="opt"><input type="checkbox" name="trust_builders" value="case_studies" />Case studies</label>
+              <label class="opt"><input type="checkbox" name="trust_builders" value="press" />Press</label>
+              <label class="opt"><input type="checkbox" name="trust_builders" value="certifications" />Certifications</label>
+              <label class="opt"><input type="checkbox" name="trust_builders" value="data_metrics" />Data metrics</label>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="brand" data-title="Brand & Visual Style">
+          <h2>Step 9 - Brand & Visual Style</h2>
+          <p class="sub">What this asks: your visual direction and tone. Why it matters: consistent branding improves clarity, credibility, and user confidence.</p>
+          <div class="grid">
+            <div><label for="brand_personality_3_words">Brand personality in 3 words</label><input id="brand_personality_3_words" name="brand_personality_3_words" type="text" /></div>
+            <div><label for="theme_preference">Dark or light theme?</label><input id="theme_preference" name="theme_preference" type="text" /></div>
+            <div><label for="design_density">Minimal or dynamic?</label><input id="design_density" name="design_density" type="text" /></div>
+            <div>
+              <label for="animation_level">Animation level</label>
+              <select id="animation_level" name="animation_level">
+                <option value="">Select</option>
+                <option value="none">None</option>
+                <option value="subtle">Subtle</option>
+                <option value="strong">Strong</option>
+              </select>
+            </div>
+            <div>
+              <label for="typography_style">Typography style</label>
+              <select id="typography_style" name="typography_style">
+                <option value="">Select</option>
+                <option value="corporate">Corporate</option>
+                <option value="editorial">Editorial</option>
+                <option value="modern">Modern</option>
+                <option value="bold">Bold</option>
+              </select>
+            </div>
+          </div>
+          <div class="box" style="margin-top:12px;">
+            <label>Color Palette</label>
+            <span class="hint">Provide preferred colors (hex values if available).</span>
+            <div class="grid" style="margin-top:10px;">
+              <div><label for="palette_primary">Primary color</label><input id="palette_primary" name="palette_primary" type="text" placeholder="#0F766E" /></div>
+              <div><label for="palette_secondary">Secondary color</label><input id="palette_secondary" name="palette_secondary" type="text" placeholder="#0E9F92" /></div>
+              <div><label for="palette_accent">Accent color</label><input id="palette_accent" name="palette_accent" type="text" placeholder="#F59E0B" /></div>
+              <div><label for="palette_background">Background color</label><input id="palette_background" name="palette_background" type="text" placeholder="#F8FAFC" /></div>
+              <div><label for="palette_text">Text color</label><input id="palette_text" name="palette_text" type="text" placeholder="#111827" /></div>
+              <div><label for="palette_notes">Palette notes</label><input id="palette_notes" name="palette_notes" type="text" placeholder="Any constraints or usage guidance" /></div>
+            </div>
+          </div>
+          <div class="grid one" style="margin-top:12px;">
+            <div><label for="sites_admire">3 sites you admire</label><textarea id="sites_admire" name="sites_admire"></textarea></div>
+            <div><label for="sites_dislike">3 sites you dislike (and why)</label><textarea id="sites_dislike" name="sites_dislike"></textarea></div>
+          </div>
+
+          <div class="conditional-block" data-user-types="influencer personal_brand" style="display:none;">
+            <h3>Personal/Influencer Branding Extras</h3>
+            <div class="grid">
+              <div><label for="face_forward_branding">Face-forward branding?</label><select id="face_forward_branding" name="face_forward_branding"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="lifestyle_photography">Lifestyle photography?</label><select id="lifestyle_photography" name="lifestyle_photography"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="controversial_positioning">Controversial positioning acceptable?</label><select id="controversial_positioning" name="controversial_positioning"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="technical" data-title="Technical Setup">
+          <h2>Step 10 - Technical Setup</h2>
+          <p class="sub">What this asks: platform, hosting, integrations, and compliance needs. Why it matters: this prevents build/deployment mismatches later.</p>
+          <div class="grid">
+            <div><label for="platform_preference">Platform preference</label><input id="platform_preference" name="platform_preference" type="text" /></div>
+            <div>
+              <label for="deployment_target">Deployment target</label>
+              <select id="deployment_target" name="deployment_target">
+                <option value="">Select</option>
+                <option value="wordpress_host">Managed WordPress Host</option>
+                <option value="vps_server">VPS / Dedicated Server</option>
+                <option value="github_pages">GitHub Pages</option>
+                <option value="vercel">Vercel</option>
+                <option value="netlify">Netlify</option>
+                <option value="cloudflare_pages">Cloudflare Pages</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div><label for="hosting_mode">Self-hosted or SaaS?</label><input id="hosting_mode" name="hosting_mode" type="text" /></div>
+            <div><label for="hosting_secured">Hosting secured?</label><select id="hosting_secured" name="hosting_secured"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="domain_secured">Domain secured?</label><select id="domain_secured" name="domain_secured"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="email_system_required">Email system required?</label><select id="email_system_required" name="email_system_required"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="crm_integration">CRM integration</label><input id="crm_integration" name="crm_integration" type="text" /></div>
+            <div><label for="payment_gateways">Payment gateways</label><input id="payment_gateways" name="payment_gateways" type="text" /></div>
+            <div><label for="membership_gating">Membership gating?</label><select id="membership_gating" name="membership_gating"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="multilingual">Multilingual?</label><select id="multilingual" name="multilingual"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="accessibility_compliance">Accessibility compliance?</label><select id="accessibility_compliance" name="accessibility_compliance"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="analytics_setup">Analytics setup?</label><select id="analytics_setup" name="analytics_setup"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="seo_setup">SEO setup?</label><select id="seo_setup" name="seo_setup"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="structured_data_required">Structured data required?</label><select id="structured_data_required" name="structured_data_required"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+          </div>
+
+          <div class="conditional-block" data-user-types="saas">
+            <h3>SaaS Technical Extras</h3>
+            <div class="grid">
+              <div><label for="api_docs_page">API documentation page?</label><select id="api_docs_page" name="api_docs_page"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div><label for="developer_portal">Developer portal?</label><select id="developer_portal" name="developer_portal"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+
+          <div class="conditional-block" data-user-types="ecommerce">
+            <h3>E-commerce Technical Extras</h3>
+            <div class="grid">
+              <div><label for="shipping_zones">Shipping zones</label><input id="shipping_zones" name="shipping_zones" type="text" /></div>
+              <div><label for="tax_rules">Tax rules</label><input id="tax_rules" name="tax_rules" type="text" /></div>
+              <div><label for="abandoned_cart_automation">Abandoned cart automation?</label><select id="abandoned_cart_automation" name="abandoned_cart_automation"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="scalability" data-title="Growth Plan">
+          <h2>Step 11 - Growth Plan</h2>
+          <p class="sub">What this asks: your near-term and long-term expansion plans. Why it matters: your architecture should support growth without rebuilds.</p>
+          <div class="grid">
+            <div><label for="goal_1y">1-year goal</label><input id="goal_1y" name="goal_1y" type="text" /></div>
+            <div><label for="vision_3y">3-year vision</label><input id="vision_3y" name="vision_3y" type="text" /></div>
+            <div>
+              <label for="future_scale">Do you expect major expansion?</label>
+              <select id="future_scale" name="future_scale"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+          </div>
+          <div class="box" style="margin-top:12px;">
+            <label>Future additions</label>
+            <div class="options cols" style="margin-top:8px;">
+              <label class="opt"><input type="checkbox" name="future_additions" value="courses" />Courses</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="software" />Software</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="community" />Community</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="physical_products" />Physical products</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="events" />Events</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="licensing" />Licensing</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="franchise" />Franchise</label>
+              <label class="opt"><input type="checkbox" name="future_additions" value="investor_pitch" />Investor pitch</label>
+            </div>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="assets" data-title="Assets You Already Have">
+          <h2>Step 12 - Assets You Already Have</h2>
+          <p class="sub">What this asks: what files/content are ready now. Why it matters: missing assets affect timeline, workload, and launch speed.</p>
+          <div class="options cols">
+            <label class="opt"><input type="checkbox" name="assets_ready" value="logo_svg" />Logo (SVG preferred)</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="brand_guide" />Brand guide</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="photos" />Photos</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="product_images" />Product images</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="testimonials" />Testimonials</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="copy_draft" />Copy draft</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="legal_pages" />Legal pages</label>
+            <label class="opt"><input type="checkbox" name="assets_ready" value="analytics_access" />Existing analytics access</label>
+          </div>
+          <p class="error" data-error></p>
+        </section>
+
+        <section class="step" data-step-id="budget" data-title="Budget, Timeline & Final Review">
+          <h2>Step 13 - Budget, Timeline & Final Review</h2>
+          <p class="sub">What this asks: your deadlines and budget range. Why it matters: this final step calibrates scope and saves your completed blueprint.</p>
+          <div class="grid">
+            <div><label for="desired_launch_date">Desired launch date</label><input id="desired_launch_date" name="desired_launch_date" type="date" /></div>
+            <div><label for="hard_deadline">Hard deadline</label><input id="hard_deadline" name="hard_deadline" type="date" /></div>
+            <div><label for="budget_range">Budget range</label><input id="budget_range" name="budget_range" type="text" /></div>
+            <div><label for="maintenance_required">Maintenance required?</label><select id="maintenance_required" name="maintenance_required"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            <div><label for="training_required">Training required?</label><select id="training_required" name="training_required"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+          </div>
+          <p class="error" data-error></p>
+
+          <div class="box" id="diagnosticsWrap" style="margin-top:12px;">
+            <label>Readiness & Risk Snapshot</label>
+            <span class="hint">This is a quick quality check of your answers so you can spot gaps before submitting.</span>
+            <div class="diag-grid">
+              <div class="score-card">
+                <span class="muted">Readiness</span>
+                <strong id="readinessScore">0%</strong>
+                <span class="muted" id="readinessLabel">Low completeness</span>
+              </div>
+              <div class="score-card">
+                <span class="muted">Risk</span>
+                <strong id="riskScore">0 / 100</strong>
+                <span class="muted" id="riskLabel">Low risk</span>
+              </div>
+            </div>
+            <ul id="riskFlagsList" class="risk-list"></ul>
+          </div>
+
+          <div class="box" id="reviewWrap" style="margin-top:12px;">
+            <label>Review Answers</label>
+            <span class="hint">Before submitting, scan each section and click Edit if anything needs to be corrected.</span>
+            <div id="reviewList" class="review-list"></div>
+          </div>
+
+        
+
+          <div id="resultWrap">
+            <label for="masterPrompt" id="masterPromptLabel">Master prompt generated for ChatGPT</label>
+            <span class="hint">This is your final output. Copy and paste it into your selected AI tool.</span>
+            <textarea id="masterPrompt" readonly></textarea>
+            <div class="nav" style="margin-top:10px;">
+              <span class="muted" id="promptHelpText">Paste this into ChatGPT to generate strategy, sitemap, copy, and technical blueprint.</span>
+              <button type="button" class="btn-secondary" id="copyPromptBtn">Copy Prompt</button>
+            </div>
+            <div class="submission-meta">
+              <div class="submission-status" id="submissionStatus">Prompt generated locally. Submit to save this intake.</div>
+              <div class="share-link-row" id="shareLinkRow">
+                <a href="#" target="_blank" rel="noopener" id="shareLinkAnchor">Open saved intake link</a>
+                <button type="button" class="btn-secondary" id="copyShareLinkBtn">Copy Link</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="nav">
+          <button type="button" class="btn-secondary" id="prevBtn">Back</button>
+          <button type="button" class="btn-primary" id="nextBtn">Next</button>
+        </div>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById('intakeForm');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const stepLabel = document.getElementById('stepLabel');
+      const stepTitle = document.getElementById('stepTitle');
+      const progressBar = document.getElementById('progressBar');
+      const resultWrap = document.getElementById('resultWrap');
+      const masterPrompt = document.getElementById('masterPrompt');
+      const copyPromptBtn = document.getElementById('copyPromptBtn');
+      const promptMode = document.getElementById('promptMode');
+      const outputEngine = document.getElementById('output_engine');
+      const heroSubtitle = document.getElementById('heroSubtitle');
+      const masterPromptLabel = document.getElementById('masterPromptLabel');
+      const promptHelpText = document.getElementById('promptHelpText');
+      const submissionStatus = document.getElementById('submissionStatus');
+      const shareLinkRow = document.getElementById('shareLinkRow');
+      const shareLinkAnchor = document.getElementById('shareLinkAnchor');
+      const copyShareLinkBtn = document.getElementById('copyShareLinkBtn');
+      const demoFillBtn = document.getElementById('demoFillBtn');
+      const resumeDraftBtn = document.getElementById('resumeDraftBtn');
+      const clearDraftBtn = document.getElementById('clearDraftBtn');
+      const draftStatus = document.getElementById('draftStatus');
+      const emailCaptureBlock = document.getElementById('emailCaptureBlock');
+      const readinessScore = document.getElementById('readinessScore');
+      const readinessLabel = document.getElementById('readinessLabel');
+      const riskScore = document.getElementById('riskScore');
+      const riskLabel = document.getElementById('riskLabel');
+      const riskFlagsList = document.getElementById('riskFlagsList');
+      const reviewList = document.getElementById('reviewList');
+      const sumDynamicRole = document.getElementById('sumDynamicRole');
+      const sumBuildMode = document.getElementById('sumBuildMode');
+      const sumScope = document.getElementById('sumScope');
+      const sumIntegration = document.getElementById('sumIntegration');
+      const sumIntent = document.getElementById('sumIntent');
+      const sumConflicts = document.getElementById('sumConflicts');
+      const compilerPresetButtons = Array.from(document.querySelectorAll('[data-compiler-preset]'));
+      const copyCompilerConfigBtn = document.getElementById('copyCompilerConfigBtn');
+      const summaryToggleButtons = Array.from(document.querySelectorAll('[data-summary-toggle]'));
+
+      const allSteps = Array.from(document.querySelectorAll('.step'));
+      let visibleSteps = [];
+      let currentIndex = 0;
+      const DRAFT_KEY = 'business-xray-draft:website-blueprint-shared';
+      const SUBMISSION_API_BASE = '/wp-json/rc-blueprint/v1/submissions';
+      const FORM_STARTED_AT = Date.now();
+      let restoringDraft = false;
+      let currentShareLink = '';
+
+      function checkedValues(name) {
+        return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((el) => el.value);
+      }
+
+      function val(name) {
+        const field = form.elements[name];
+        if (!field) return '';
+        if (field instanceof RadioNodeList) return (field.value || '').trim();
+        return (field.value || '').trim();
+      }
+
+      function sourcePathForSubmission() {
+        return window.location.pathname.indexOf('/website-blueprint-codex') === 0
+          ? '/website-blueprint-codex/'
+          : '/website-blueprint/';
+      }
+
+      function setSubmissionStatus(message, isError) {
+        if (!submissionStatus) return;
+        submissionStatus.textContent = message;
+        submissionStatus.style.color = isError ? '#fecaca' : '#ecf3ff';
+      }
+
+      function setShareLink(url) {
+        currentShareLink = url || '';
+        if (!shareLinkRow || !shareLinkAnchor) return;
+        if (!currentShareLink) {
+          shareLinkRow.style.display = 'none';
+          shareLinkAnchor.removeAttribute('href');
+          shareLinkAnchor.textContent = '';
+          return;
+        }
+        shareLinkAnchor.href = currentShareLink;
+        shareLinkAnchor.textContent = currentShareLink;
+        shareLinkRow.style.display = 'flex';
+      }
+
+      function getPromptModeCopy() {
+        const mode = outputEngine && outputEngine.value ? outputEngine.value : (promptMode ? promptMode.value : 'chatgpt');
+        if (mode === 'codex') {
+          return {
+            target: 'Codex',
+            subtitle: 'Answer the questions once, then get a Codex-ready master prompt for a full website output.',
+            help: 'Paste this into Codex to generate your full website structure and files.'
+          };
+        }
+        return {
+          target: 'ChatGPT',
+          subtitle: 'Answer the questions once, then get a ChatGPT-ready master prompt for your website plan and build path.',
+          help: 'Paste this into ChatGPT to generate strategy, sitemap, copy, and implementation plan.'
+        };
+      }
+
+      function applyPromptModeCopy() {
+        const copy = getPromptModeCopy();
+        if (heroSubtitle) heroSubtitle.textContent = copy.subtitle;
+        if (masterPromptLabel) masterPromptLabel.textContent = `Master prompt generated for ${copy.target}`;
+        if (promptHelpText) promptHelpText.textContent = copy.help;
+      }
+
+      function setValue(nameOrId, value, shouldDispatch) {
+        const dispatch = shouldDispatch !== false;
+        const byId = document.getElementById(nameOrId);
+        if (byId) {
+          byId.value = value;
+          if (dispatch) byId.dispatchEvent(new Event('change', { bubbles: true }));
+          return;
+        }
+        const field = form.elements[nameOrId];
+        if (field && !(field instanceof RadioNodeList)) {
+          field.value = value;
+          if (dispatch) field.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      function setRadio(name, value, shouldDispatch) {
+        const dispatch = shouldDispatch !== false;
+        const el = form.querySelector(`input[name="${name}"][value="${value}"]`);
+        if (!el) return;
+        el.checked = true;
+        if (dispatch) el.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      function setChecks(name, values, shouldDispatch) {
+        const dispatch = shouldDispatch !== false;
+        const wanted = new Set(values);
+        form.querySelectorAll(`input[name="${name}"]`).forEach((el) => {
+          el.checked = wanted.has(el.value);
+          if (dispatch) el.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      }
+
+      function labelMap(value, map) {
+        return map[value] || value || 'Not provided';
+      }
+
+      function asText(arr, fallback) {
+        if (!arr || arr.length === 0) return fallback || 'Not provided';
+        return arr.join(', ');
+      }
+
+
+      const REQUIRED_SCHEMA_FIELDS = {
+        project_archetype: ['ecommerce', 'saas', 'portfolio', 'local_business', 'content_platform', 'hybrid'],
+        delivery_mode: ['static_prototype', 'wordpress_theme', 'react_app', 'headless_frontend', 'architecture_only'],
+        output_engine: ['chatgpt', 'codex'],
+        scope_preference: ['mvp', 'standard', 'production_spec'],
+        integration_mode: ['basic', 'moderate', 'complex']
+      };
+
+      function assignDynamicRole(project_archetype) {
+        const roles = {
+          ecommerce: 'Ecommerce systems architect + conversion engineer',
+          saas: 'Product systems strategist + onboarding engineer',
+          portfolio: 'Personal brand architect + UX strategist',
+          local_business: 'Local conversion UX engineer',
+          content_platform: 'Content growth architect + SEO systems planner',
+          hybrid: 'Multi-model digital systems architect'
+        };
+
+        return roles[project_archetype];
+      }
+
+      function resolveBuildMode(delivery_mode, output_engine) {
+        return `${delivery_mode}_${output_engine}`;
+      }
+
+      function resolveScope(scope_preference) {
+        switch (scope_preference) {
+          case 'mvp':
+            return {
+              max_pages: 8,
+              backend: 'simulated',
+              documentation: 'minimal'
+            };
+          case 'standard':
+            return {
+              max_pages: 12,
+              backend: 'simulated',
+              documentation: 'moderate'
+            };
+          case 'production_spec':
+            return {
+              max_pages: 20,
+              backend: 'architecture_defined',
+              documentation: 'detailed'
+            };
+          default:
+            return null;
+        }
+      }
+
+      function resolveIntegrationMode(integration_mode) {
+        if (integration_mode === 'complex') {
+          return {
+            output: 'placeholder_structures_only',
+            webhook_simulation: true,
+            forbid_api_keys: true
+          };
+        }
+
+        if (integration_mode === 'moderate') {
+          return {
+            output: 'connection_architecture_only',
+            webhook_simulation: false,
+            forbid_api_keys: true
+          };
+        }
+
+        return {
+          output: 'minimal_integration',
+          webhook_simulation: false,
+          forbid_api_keys: true
+        };
+      }
+
+      function composeArchitecturalIntent(data) {
+        return `
+Primary Goal: ${data.primary_goal}
+Revenue Model: ${data.revenue_model}
+Funnel Structure: ${data.funnel_structure}
+Trust Layers: ${data.trust_layers}
+Growth Vector: ${data.growth_vector}
+`;
+      }
+
+      function validateConfiguration(data) {
+        let warnings = [];
+        const platformRaw = String(data.platform || '').trim().toLowerCase();
+        const deploymentRaw = String(data.deployment_target || '').trim().toLowerCase();
+        const platformIsWordPress = platformRaw === 'wordpress' || platformRaw === 'wordpress theme' || platformRaw.indexOf('wordpress') !== -1;
+        const deploymentIsGithubPages = deploymentRaw === 'github pages' || deploymentRaw === 'github_pages';
+
+        if (platformIsWordPress && deploymentIsGithubPages) {
+          warnings.push('Platform/Deployment mismatch detected.');
+        }
+
+        if (!data.primary_goal || !data.revenue_model) {
+          warnings.push('Critical strategic fields missing.');
+        }
+
+        return warnings;
+      }
+
+      function validateRequiredSchemaFields() {
+        const missing = [];
+        const invalid = [];
+
+        Object.keys(REQUIRED_SCHEMA_FIELDS).forEach((field) => {
+          const value = val(field);
+          if (!value) {
+            missing.push(field);
+            return;
+          }
+          if (!REQUIRED_SCHEMA_FIELDS[field].includes(value)) {
+            invalid.push(field);
+          }
+        });
+
+        return {
+          ok: missing.length === 0 && invalid.length === 0,
+          missing,
+          invalid
+        };
+      }
+
+      function syncOutputEngineSelectors(source) {
+        if (!promptMode || !outputEngine) return;
+        if (source === 'promptMode' && promptMode.value && outputEngine.value !== promptMode.value) {
+          outputEngine.value = promptMode.value;
+        }
+        if (source === 'outputEngine' && outputEngine.value && promptMode.value !== outputEngine.value) {
+          promptMode.value = outputEngine.value;
+        }
+      }
+
+
+      function setCompilerPreset(presetId) {
+        const presets = {
+          ecom_mvp: {
+            project_archetype: 'ecommerce',
+            delivery_mode: 'wordpress_theme',
+            output_engine: 'chatgpt',
+            scope_preference: 'mvp',
+            integration_mode: 'moderate'
+          },
+          saas_prod: {
+            project_archetype: 'saas',
+            delivery_mode: 'react_app',
+            output_engine: 'codex',
+            scope_preference: 'production_spec',
+            integration_mode: 'complex'
+          },
+          portfolio_spec: {
+            project_archetype: 'portfolio',
+            delivery_mode: 'static_prototype',
+            output_engine: 'chatgpt',
+            scope_preference: 'standard',
+            integration_mode: 'basic'
+          }
+        };
+
+        const preset = presets[presetId];
+        if (!preset) return;
+
+        Object.keys(preset).forEach((k) => {
+          setValue(k, preset[k], false);
+        });
+
+        if (outputEngine) outputEngine.value = preset.output_engine;
+        if (promptMode) promptMode.value = preset.output_engine;
+      }
+
+      function setSummaryState(el, text, state) {
+        if (!el) return;
+        el.classList.remove('pending', 'warn', 'ok');
+        if (state) el.classList.add(state);
+        el.textContent = text;
+      }
+
+
+      function setRequiredBadge(fieldName, isValid) {
+        const badge = form.querySelector(`[data-required-badge="${fieldName}"]`);
+        if (!badge) return;
+        badge.classList.remove('pending', 'ok');
+        if (isValid) {
+          badge.classList.add('ok');
+          badge.textContent = 'Complete';
+        } else {
+          badge.classList.add('pending');
+          badge.textContent = 'Missing';
+        }
+      }
+
+      function collectCompilerConfigForExport() {
+        const projectArchetype = val('project_archetype');
+        const deliveryMode = val('delivery_mode');
+        const output = val('output_engine') || (promptMode ? promptMode.value : '');
+        const scopePref = val('scope_preference');
+        const integrationMode = val('integration_mode');
+
+        const scope = scopePref ? resolveScope(scopePref) : null;
+        const integration = integrationMode ? resolveIntegrationMode(integrationMode) : null;
+
+        return {
+          project_archetype: projectArchetype || null,
+          delivery_mode: deliveryMode || null,
+          output_engine: output || null,
+          scope_preference: scopePref || null,
+          integration_mode: integrationMode || null,
+          dynamic_role: projectArchetype ? assignDynamicRole(projectArchetype) : null,
+          build_mode: (deliveryMode && output) ? resolveBuildMode(deliveryMode, output) : null,
+          scope_constraints: scope,
+          integration_constraints: integration,
+          safety: {
+            forbid_api_keys: true,
+            forbid_fabricated_credentials: true,
+            forbid_working_webhook_urls: true
+          }
+        };
+      }
+
+
+      function renderRequiredInlineHints() {
+        Object.keys(REQUIRED_SCHEMA_FIELDS).forEach((fieldName) => {
+          const field = form.elements[fieldName];
+          const hint = form.querySelector(`[data-required-field="${fieldName}"]`);
+          const value = val(fieldName);
+          const valid = value && REQUIRED_SCHEMA_FIELDS[fieldName].includes(value);
+
+          if (field && field.classList) field.classList.remove('input-required-missing');
+          setRequiredBadge(fieldName, !!valid);
+
+          if (!hint) return;
+          if (valid) {
+            hint.textContent = '';
+          } else {
+            hint.textContent = 'Required: choose one option.';
+            if (field && field.classList) field.classList.add('input-required-missing');
+          }
+        });
+      }
+
+      function renderCompilerSummary() {
+        const projectArchetype = val('project_archetype');
+        const deliveryMode = val('delivery_mode');
+        const output = val('output_engine') || (promptMode ? promptMode.value : '');
+        const scopePref = val('scope_preference');
+        const integrationMode = val('integration_mode');
+
+        const role = projectArchetype ? assignDynamicRole(projectArchetype) : 'Pending required field';
+        const buildMode = (deliveryMode && output) ? resolveBuildMode(deliveryMode, output) : 'Pending required field';
+        const scope = scopePref ? resolveScope(scopePref) : null;
+        const integration = integrationMode ? resolveIntegrationMode(integrationMode) : null;
+
+        const primaryGoal = val('primary_goal') || 'Not provided';
+        const revenueModel = asText(checkedValues('revenue_model'), 'Not provided');
+        const funnelStructure = `${val('primary_cta') || 'not_provided'} -> ${val('secondary_cta') || 'none'}`;
+        const trustLayers = asText(checkedValues('trust_builders'), 'none');
+        const growthVector = val('goal_1y') || asText(checkedValues('future_additions'), 'none');
+
+        const architecturalIntent = composeArchitecturalIntent({
+          primary_goal: primaryGoal,
+          revenue_model: revenueModel,
+          funnel_structure: funnelStructure,
+          trust_layers: trustLayers,
+          growth_vector: growthVector
+        }).trim();
+
+        const warnings = validateConfiguration({
+          platform: val('platform_preference'),
+          deployment_target: val('deployment_target'),
+          primary_goal: val('primary_goal'),
+          revenue_model: checkedValues('revenue_model').length ? 'provided' : ''
+        });
+
+        const schemaStatus = validateRequiredSchemaFields();
+
+        setSummaryState(sumDynamicRole, role, projectArchetype ? 'ok' : 'pending');
+        setSummaryState(sumBuildMode, buildMode, (deliveryMode && output) ? 'ok' : 'pending');
+        if (sumScope) {
+          setSummaryState(sumScope, scope
+            ? `max_pages=${scope.max_pages}\nbackend=${scope.backend}\ndocumentation=${scope.documentation}`
+            : 'Pending required field', scope ? 'ok' : 'pending');
+        }
+        if (sumIntegration) {
+          setSummaryState(sumIntegration, integration
+            ? `${integration.output}\nwebhook_simulation=${integration.webhook_simulation}\nforbid_api_keys=${integration.forbid_api_keys}\nforbid_fabricated_credentials=true\nforbid_working_webhook_urls=true`
+            : 'Pending required field', integration ? 'ok' : 'pending');
+        }
+        setSummaryState(sumIntent, architecturalIntent, primaryGoal !== 'Not provided' ? 'ok' : 'pending');
+
+        if (sumConflicts) {
+          const list = [];
+          if (schemaStatus.missing.length) list.push(`Missing required: ${schemaStatus.missing.join(', ')}`);
+          if (schemaStatus.invalid.length) list.push(`Invalid values: ${schemaStatus.invalid.join(', ')}`);
+          warnings.forEach((w) => list.push(w));
+          setSummaryState(sumConflicts, list.length ? list.join('\n') : 'None', list.length ? 'warn' : 'ok');
+        }
+      }
+
+      function getStepById(stepId) {
+        return allSteps.find((step) => step.dataset.stepId === stepId) || null;
+      }
+
+      function isFieldFilled(element) {
+        if (!element) return false;
+        if (element.type === 'checkbox' || element.type === 'radio') return element.checked;
+        return String(element.value || '').trim() !== '';
+      }
+
+      function summarizeStepCompletion(step) {
+        const controls = Array.from(step.querySelectorAll('input, select, textarea'));
+        const groups = new Map();
+        const leadCapture = checkedValues('lead_capture');
+        const hasEmailCapture = leadCapture.some((v) => ['email_newsletter', 'free_resource', 'discount', 'webinar'].includes(v));
+        const currentUserType = userType();
+
+        function isControlApplicable(control) {
+          const conditionalOwner = control.closest('.conditional-block[data-user-types]');
+          if (conditionalOwner) {
+            const types = conditionalOwner.dataset.userTypes.split(/\s+/).filter(Boolean);
+            if (!types.includes(currentUserType)) return false;
+          }
+
+          const emailOwner = control.closest('#emailCaptureBlock');
+          if (emailOwner && !hasEmailCapture) return false;
+
+          return true;
+        }
+
+        controls.forEach((control) => {
+          if (!isControlApplicable(control)) return;
+          const key = control.name || control.id;
+          if (!key) return;
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(control);
+        });
+
+        let total = 0;
+        let filled = 0;
+        groups.forEach((groupControls) => {
+          total += 1;
+          if (groupControls.some(isFieldFilled)) filled += 1;
+        });
+
+        return { total, filled };
+      }
+
+      function buildRiskFlags() {
+        const flags = [];
+        const audience = val('audience_sentence');
+        const assetsCount = checkedValues('assets_ready').length;
+
+        if (/\beveryone\b/i.test(audience)) flags.push('Audience clarity risk: includes "everyone".');
+        if (!val('budget_range')) flags.push('Budget undefined.');
+        if (!val('hard_deadline')) flags.push('Hard deadline not provided.');
+        if (!val('primary_cta')) flags.push('Primary CTA not selected.');
+        if (checkedValues('revenue_model').includes('not_monetizing_yet')) flags.push('Monetization path not defined yet.');
+        if (assetsCount > 0 && assetsCount < 3) flags.push('Limited ready assets may slow production.');
+
+        if (val('hard_deadline')) {
+          const now = new Date();
+          const deadline = new Date(`${val('hard_deadline')}T00:00:00`);
+          if (!Number.isNaN(deadline.getTime())) {
+            const days = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+            if (days > 0 && days < 30) flags.push(`Tight deadline: ${days} days remaining.`);
+          }
+        }
+
+        return flags;
+      }
+
+      function computeReadiness() {
+        const keyFields = [
+          'user_type', 'primary_goal', 'audience_sentence', 'pain_points', 'desired_outcomes',
+          'why_choose_you', 'primary_cta', 'brand_personality_3_words', 'platform_preference',
+          'budget_range', 'desired_launch_date', 'hard_deadline'
+        ];
+
+        let filled = 0;
+        keyFields.forEach((name) => {
+          if (String(val(name) || '').trim() !== '') filled += 1;
+        });
+        if (checkedValues('assets_ready').length > 0) filled += 1;
+        if (checkedValues('revenue_model').length > 0) filled += 1;
+
+        const total = keyFields.length + 2;
+        return Math.round((filled / total) * 100);
+      }
+
+      function renderDiagnostics() {
+        const readiness = computeReadiness();
+        const flags = buildRiskFlags();
+        const score = Math.max(0, 100 - (flags.length * 12));
+
+        readinessScore.textContent = `${readiness}%`;
+        readinessLabel.textContent = readiness >= 80 ? 'Strong readiness' : readiness >= 55 ? 'Moderate readiness' : 'Low completeness';
+
+        riskScore.textContent = `${score} / 100`;
+        riskLabel.textContent = score >= 75 ? 'Low risk' : score >= 45 ? 'Moderate risk' : 'High risk';
+
+        riskFlagsList.innerHTML = '';
+        if (flags.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'No material risks detected from current inputs.';
+          riskFlagsList.appendChild(li);
+          return;
+        }
+
+        flags.forEach((flag) => {
+          const li = document.createElement('li');
+          li.textContent = flag;
+          riskFlagsList.appendChild(li);
+        });
+      }
+
+      function renderReview() {
+        reviewList.innerHTML = '';
+        visibleSteps.forEach((step) => {
+          const summary = summarizeStepCompletion(step);
+          const item = document.createElement('div');
+          item.className = 'review-item';
+
+          const left = document.createElement('div');
+          const title = document.createElement('div');
+          title.textContent = step.querySelector('h2') ? step.querySelector('h2').textContent : step.dataset.title;
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = `${summary.filled} / ${summary.total} inputs completed`;
+          left.appendChild(title);
+          left.appendChild(meta);
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn-secondary';
+          btn.textContent = 'Edit';
+          btn.setAttribute('data-edit-step', step.dataset.stepId);
+
+          item.appendChild(left);
+          item.appendChild(btn);
+          reviewList.appendChild(item);
+        });
+      }
+
+      function collectDraftValues() {
+        const values = {};
+        form.querySelectorAll('input, select, textarea').forEach((element) => {
+          const key = element.name || element.id;
+          if (!key) return;
+
+          if (element.type === 'radio') {
+            if (!(key in values)) values[key] = '';
+            if (element.checked) values[key] = element.value;
+            return;
+          }
+
+          if (element.type === 'checkbox') {
+            if (!Array.isArray(values[key])) values[key] = [];
+            if (element.checked) values[key].push(element.value);
+            return;
+          }
+
+          values[key] = element.value;
+        });
+        return values;
+      }
+
+      function formatPromptValue(value) {
+        if (Array.isArray(value)) {
+          return value.length ? value.join(', ') : 'Not provided';
+        }
+        const text = String(value || '').trim();
+        return text !== '' ? text : 'Not provided';
+      }
+
+      function buildFullFieldMapLines() {
+        const values = collectDraftValues();
+        const keys = Object.keys(values).sort();
+        return keys.map((key) => `- ${key}: ${formatPromptValue(values[key])}`).join('\n');
+      }
+
+      function buildStepStructuredSummary() {
+        const values = collectDraftValues();
+        const sections = [
+          {
+            title: 'Step 1 - Start Here',
+            keys: ['project_archetype', 'delivery_mode', 'output_engine', 'scope_preference', 'integration_mode']
+          },
+          {
+            title: 'Step 2 - About Your Business',
+            keys: ['user_type']
+          },
+          {
+            title: 'Step 3 - Main Goal',
+            keys: ['primary_goal']
+          },
+          {
+            title: 'Step 4 - How You Make Money',
+            keys: ['revenue_model']
+          },
+          {
+            title: 'Step 5 - Target Audience',
+            keys: ['audience_sentence', 'age_range', 'audience_geo', 'income_range', 'skill_level', 'pain_points', 'desired_outcomes', 'why_choose_you']
+          },
+          {
+            title: 'Step 6 - Content Plan',
+            keys: ['primary_content_format', 'posting_frequency', 'content_features', 'blogger_traffic_goal', 'blogger_seo_strategy', 'influencer_features', 'saas_content_features']
+          },
+          {
+            title: 'Step 7 - Offer Setup',
+            keys: ['services_list', 'services_separate_pages', 'pricing_displayed', 'service_packages', 'qualification_before_booking', 'want_case_studies', 'product_count', 'product_categories', 'subscription_products', 'inventory_tracking', 'upsell_cross_sell_system', 'customer_account_area', 'product_reviews', 'pricing_tiers', 'free_trial', 'demo_booking', 'feature_breakdown_depth', 'comparison_table_needed', 'onboarding_walkthrough_page', 'donation_system', 'recurring_donations', 'volunteer_form', 'event_pages', 'impact_reporting_page']
+          },
+          {
+            title: 'Step 8 - Lead Flow & Conversion',
+            keys: ['primary_cta', 'secondary_cta', 'lead_capture', 'email_platform', 'email_automation_needed', 'trust_builders']
+          },
+          {
+            title: 'Step 9 - Brand & Visual Style',
+            keys: ['brand_personality_3_words', 'theme_preference', 'design_density', 'animation_level', 'typography_style', 'palette_primary', 'palette_secondary', 'palette_accent', 'palette_background', 'palette_text', 'palette_notes', 'sites_admire', 'sites_dislike', 'face_forward_branding', 'lifestyle_photography', 'controversial_positioning']
+          },
+          {
+            title: 'Step 10 - Technical Setup',
+            keys: ['platform_preference', 'deployment_target', 'hosting_mode', 'hosting_secured', 'domain_secured', 'email_system_required', 'crm_integration', 'payment_gateways', 'membership_gating', 'multilingual', 'accessibility_compliance', 'analytics_setup', 'seo_setup', 'structured_data_required', 'api_docs_page', 'developer_portal', 'shipping_zones', 'tax_rules', 'abandoned_cart_automation']
+          },
+          {
+            title: 'Step 11 - Growth Plan',
+            keys: ['goal_1y', 'vision_3y', 'future_scale', 'future_additions']
+          },
+          {
+            title: 'Step 12 - Assets You Already Have',
+            keys: ['assets_ready']
+          },
+          {
+            title: 'Step 13 - Budget, Timeline & Final Review',
+            keys: ['desired_launch_date', 'hard_deadline', 'budget_range', 'maintenance_required', 'training_required', 'contact_name', 'contact_email']
+          }
+        ];
+
+        return sections.map((section) => {
+          const lines = section.keys.map((key) => `- ${key}: ${formatPromptValue(values[key])}`);
+          return `[${section.title}]\n${lines.join('\n')}`;
+        }).join('\n\n');
+      }
+
+      function saveDraftStatus(text) {
+        draftStatus.textContent = text;
+      }
+
+      function saveDraft() {
+        if (restoringDraft) return;
+        try {
+          const payload = {
+            currentStepId: visibleSteps[currentIndex] ? visibleSteps[currentIndex].dataset.stepId : null,
+            values: collectDraftValues(),
+            prompt: masterPrompt.value || '',
+            showResult: resultWrap.style.display === 'block',
+            savedAt: new Date().toISOString()
+          };
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+          saveDraftStatus(`Saved ${new Date(payload.savedAt).toLocaleTimeString()}`);
+        } catch (err) {
+          saveDraftStatus('Autosave unavailable');
+        }
+      }
+
+      function applyDraft(values) {
+        if (!values || typeof values !== 'object') return;
+        Object.keys(values).forEach((key) => {
+          const nextValue = values[key];
+          const hasRadios = form.querySelector(`input[type="radio"][name="${key}"]`);
+          const hasChecks = form.querySelector(`input[type="checkbox"][name="${key}"]`);
+          if (Array.isArray(nextValue) && hasChecks) {
+            setChecks(key, nextValue, false);
+          } else if (hasRadios) {
+            if (nextValue) setRadio(key, nextValue, false);
+          } else {
+            setValue(key, nextValue, false);
+          }
+        });
+      }
+
+      function resumeDraft() {
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (!raw) {
+            saveDraftStatus('No saved draft');
+            return;
+          }
+          const draft = JSON.parse(raw);
+          restoringDraft = true;
+          form.reset();
+          applyDraft(draft.values || {});
+
+          render();
+
+          if (draft.currentStepId) {
+            const newIndex = visibleSteps.findIndex((step) => step.dataset.stepId === draft.currentStepId);
+            if (newIndex >= 0) currentIndex = newIndex;
+          }
+
+          if (draft.showResult && draft.prompt) {
+            masterPrompt.value = draft.prompt;
+            resultWrap.style.display = 'block';
+          } else {
+            masterPrompt.value = '';
+            resultWrap.style.display = 'none';
+          }
+
+          render();
+          saveDraftStatus(`Draft loaded (${new Date(draft.savedAt || Date.now()).toLocaleString()})`);
+        } catch (err) {
+          saveDraftStatus('Failed to load draft');
+        } finally {
+          restoringDraft = false;
+        }
+      }
+
+      function clearDraft() {
+        localStorage.removeItem(DRAFT_KEY);
+        form.reset();
+        masterPrompt.value = '';
+        resultWrap.style.display = 'none';
+        setShareLink('');
+        setSubmissionStatus('Prompt generated locally. Submit to save this intake.');
+        currentIndex = 0;
+        render();
+        saveDraftStatus('Draft cleared');
+      }
+
+      function showStepError(step, message) {
+        const box = step.querySelector('[data-error]');
+        if (!box) return;
+        box.textContent = message || '';
+        box.style.display = message ? 'block' : 'none';
+      }
+
+      function userType() {
+        return val('user_type');
+      }
+
+      function primaryGoal() {
+        return val('primary_goal');
+      }
+
+      function shouldShowMonetization() {
+        const type = userType();
+        const goal = primaryGoal();
+        const types = new Set(['freelancer', 'blogger', 'influencer', 'saas', 'ecommerce']);
+        return goal === 'revenue' || types.has(type);
+      }
+
+      function shouldShowContentEngine() {
+        const type = userType();
+        return ['blogger', 'influencer', 'personal_brand', 'saas', 'freelancer'].includes(type);
+      }
+
+      function shouldShowOfferStructure() {
+        const type = userType();
+        return ['freelancer', 'local_business', 'ecommerce', 'saas', 'nonprofit'].includes(type);
+      }
+
+      function stepVisible(step) {
+        const id = step.dataset.stepId;
+        if (id === 'monetization') return shouldShowMonetization();
+        if (id === 'content') return shouldShowContentEngine();
+        if (id === 'offer') return shouldShowOfferStructure();
+        return true;
+      }
+
+      function updateConditionalBlocks() {
+        const type = userType();
+
+        document.querySelectorAll('.conditional-block[data-user-types]').forEach((block) => {
+          const types = block.dataset.userTypes.split(/\s+/).filter(Boolean);
+          block.style.display = types.includes(type) ? 'block' : 'none';
+        });
+
+        const leadCapture = checkedValues('lead_capture');
+        const hasEmailCapture = leadCapture.some((v) => ['email_newsletter', 'free_resource', 'discount', 'webinar'].includes(v));
+        emailCaptureBlock.style.display = hasEmailCapture ? 'block' : 'none';
+      }
+
+      function computeVisibleSteps() {
+        visibleSteps = allSteps.filter(stepVisible);
+      }
+
+      function render() {
+        computeVisibleSteps();
+
+        if (currentIndex > visibleSteps.length - 1) {
+          currentIndex = visibleSteps.length - 1;
+        }
+        if (currentIndex < 0) currentIndex = 0;
+
+        allSteps.forEach((step) => {
+          step.classList.remove('active');
+          showStepError(step, '');
+        });
+
+        const currentStep = visibleSteps[currentIndex];
+        if (currentStep) currentStep.classList.add('active');
+
+        const total = visibleSteps.length;
+        const num = currentIndex + 1;
+        stepLabel.textContent = `Step ${num} of ${total}`;
+        stepTitle.textContent = currentStep ? currentStep.dataset.title : '';
+        progressBar.style.width = `${(num / total) * 100}%`;
+
+        prevBtn.style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+        nextBtn.textContent = currentIndex === total - 1 ? 'Submit to Create Master Prompt' : 'Next';
+
+        updateConditionalBlocks();
+        renderRequiredInlineHints();
+        renderCompilerSummary();
+        renderDiagnostics();
+        renderReview();
+      }
+
+      function validateCurrentStep() {
+        const step = visibleSteps[currentIndex];
+        if (!step) return true;
+
+        showStepError(step, '');
+        const id = step.dataset.stepId;
+
+        if (id === 'compiler') {
+          const schemaStatus = validateRequiredSchemaFields();
+          if (!schemaStatus.ok) {
+            const missing = schemaStatus.missing.length ? `Missing: ${schemaStatus.missing.join(', ')}` : '';
+            const invalid = schemaStatus.invalid.length ? `Invalid: ${schemaStatus.invalid.join(', ')}` : '';
+            showStepError(step, `Complete all required compiler fields. ${missing} ${invalid}`.trim());
+            return false;
+          }
+        }
+
+        if (id === 'identity' && !val('user_type')) {
+          showStepError(step, 'Select one identity type to continue.');
+          return false;
+        }
+
+        if (id === 'goal' && !val('primary_goal')) {
+          showStepError(step, 'Select a primary goal to continue.');
+          return false;
+        }
+
+        if (id === 'monetization' && checkedValues('revenue_model').length === 0) {
+          showStepError(step, 'Select at least one revenue stream.');
+          return false;
+        }
+
+        if (id === 'audience' && !val('audience_sentence')) {
+          showStepError(step, 'Describe your ideal audience in one sentence.');
+          return false;
+        }
+
+        if (id === 'funnel' && !val('primary_cta')) {
+          showStepError(step, 'Choose a primary CTA.');
+          return false;
+        }
+
+        if (id === 'content') {
+          const hasCore =
+            !!val('primary_content_format') ||
+            !!val('posting_frequency') ||
+            checkedValues('content_features').length > 0;
+          const hasBlogger =
+            !!val('blogger_traffic_goal') ||
+            !!val('blogger_seo_strategy');
+          const hasInfluencer = checkedValues('influencer_features').length > 0;
+          const hasSaas = checkedValues('saas_content_features').length > 0;
+          if (!(hasCore || hasBlogger || hasInfluencer || hasSaas)) {
+            showStepError(step, 'Add at least one content plan detail (format, frequency, or content feature).');
+            return false;
+          }
+        }
+
+        if (id === 'offer') {
+          const type = userType();
+          let hasOfferData = false;
+
+          if (type === 'freelancer' || type === 'local_business') {
+            hasOfferData =
+              !!val('services_list') ||
+              !!val('services_separate_pages') ||
+              !!val('pricing_displayed') ||
+              !!val('service_packages') ||
+              !!val('qualification_before_booking') ||
+              !!val('want_case_studies');
+          } else if (type === 'ecommerce') {
+            hasOfferData =
+              !!val('product_count') ||
+              !!val('product_categories') ||
+              !!val('subscription_products') ||
+              !!val('inventory_tracking') ||
+              !!val('upsell_cross_sell_system') ||
+              !!val('customer_account_area') ||
+              !!val('product_reviews');
+          } else if (type === 'saas') {
+            hasOfferData =
+              !!val('pricing_tiers') ||
+              !!val('free_trial') ||
+              !!val('demo_booking') ||
+              !!val('feature_breakdown_depth') ||
+              !!val('comparison_table_needed') ||
+              !!val('onboarding_walkthrough_page');
+          } else if (type === 'nonprofit') {
+            hasOfferData =
+              !!val('donation_system') ||
+              !!val('recurring_donations') ||
+              !!val('volunteer_form') ||
+              !!val('event_pages') ||
+              !!val('impact_reporting_page');
+          }
+
+          if (!hasOfferData) {
+            showStepError(step, 'Add at least one offer detail so your build can be scoped correctly.');
+            return false;
+          }
+        }
+
+        if (id === 'brand') {
+          if (!val('brand_personality_3_words') || !val('theme_preference')) {
+            showStepError(step, 'Add your brand personality and theme preference.');
+            return false;
+          }
+        }
+
+        if (id === 'technical') {
+          if (!val('platform_preference') || !val('deployment_target')) {
+            showStepError(step, 'Set both platform preference and deployment target.');
+            return false;
+          }
+        }
+
+        if (id === 'scalability') {
+          const hasVision = !!val('goal_1y') || !!val('vision_3y') || !!val('future_scale') || checkedValues('future_additions').length > 0;
+          if (!hasVision) {
+            showStepError(step, 'Add at least one growth signal (1-year goal, 3-year vision, scale, or future additions).');
+            return false;
+          }
+        }
+
+        if (id === 'assets' && checkedValues('assets_ready').length === 0) {
+          showStepError(step, 'Select at least one ready asset.');
+          return false;
+        }
+
+        if (id === 'budget') {
+          if (!val('budget_range')) {
+            showStepError(step, 'Add your budget range.');
+            return false;
+          }
+          if (!val('desired_launch_date') && !val('hard_deadline')) {
+            showStepError(step, 'Add a desired launch date or a hard deadline.');
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function generatePrompt() {
+        const userTypeMap = {
+          local_business: 'Local Business',
+          ecommerce: 'E-commerce Brand',
+          freelancer: 'Freelancer / Consultant',
+          blogger: 'Blogger',
+          influencer: 'Influencer / Creator',
+          saas: 'SaaS / App',
+          nonprofit: 'Nonprofit',
+          personal_brand: 'Personal Brand',
+          portfolio: 'Portfolio / Artist',
+          community: 'Community / Membership'
+        };
+
+        const goalMap = {
+          revenue: 'Revenue',
+          lead_generation: 'Lead Generation',
+          authority: 'Authority',
+          audience_growth: 'Audience Growth',
+          portfolio_visibility: 'Portfolio Visibility',
+          community: 'Community',
+          fundraising: 'Fundraising',
+          product_launch: 'Product Launch'
+        };
+
+        const schemaStatus = validateRequiredSchemaFields();
+        if (!schemaStatus.ok) {
+          throw new Error('Required compiler fields missing or invalid.');
+        }
+
+        const normalizedOutputEngine = val('output_engine') || (promptMode ? promptMode.value : 'chatgpt');
+        if (outputEngine && !outputEngine.value) outputEngine.value = normalizedOutputEngine;
+        if (promptMode && promptMode.value !== normalizedOutputEngine) promptMode.value = normalizedOutputEngine;
+
+        const data = {
+          project_archetype: val('project_archetype'),
+          delivery_mode: val('delivery_mode'),
+          output_engine: normalizedOutputEngine,
+          scope_preference: val('scope_preference'),
+          integration_mode: val('integration_mode'),
+          user_type: labelMap(val('user_type'), userTypeMap),
+          primary_goal: labelMap(val('primary_goal'), goalMap),
+          revenue_model: checkedValues('revenue_model'),
+          trust_builders: checkedValues('trust_builders'),
+          primary_cta: val('primary_cta'),
+          secondary_cta: val('secondary_cta'),
+          goal_1y: val('goal_1y'),
+          future_additions: checkedValues('future_additions'),
+          platform_preference: val('platform_preference'),
+          deployment_target: val('deployment_target'),
+          audience_sentence: val('audience_sentence'),
+          desired_outcomes: val('desired_outcomes'),
+          budget_range: val('budget_range'),
+          hard_deadline: val('hard_deadline')
+        };
+
+        const fullFieldMapLines = buildFullFieldMapLines();
+        const stepStructuredSummary = buildStepStructuredSummary();
+        const readinessNow = computeReadiness();
+        const riskFlagsNow = buildRiskFlags();
+        const riskScoreNow = Math.max(0, 100 - (riskFlagsNow.length * 12));
+
+        data.funnel_structure = `${data.primary_cta || 'not_provided'} -> ${data.secondary_cta || 'none'}`;
+        data.trust_layers = asText(data.trust_builders, 'none');
+        data.growth_vector = data.goal_1y || asText(data.future_additions, 'none');
+
+        const dynamic_role = assignDynamicRole(data.project_archetype);
+        const BUILD_MODE = resolveBuildMode(data.delivery_mode, data.output_engine);
+        const scopeRules = resolveScope(data.scope_preference);
+        const integrationRules = resolveIntegrationMode(data.integration_mode);
+        const architecturalIntent = composeArchitecturalIntent({
+          primary_goal: data.primary_goal || 'Not provided',
+          revenue_model: asText(data.revenue_model, 'Not provided'),
+          funnel_structure: data.funnel_structure,
+          trust_layers: data.trust_layers,
+          growth_vector: data.growth_vector
+        }).trim();
+
+        const configurationWarnings = validateConfiguration({
+          platform: data.platform_preference,
+          deployment_target: data.deployment_target,
+          primary_goal: data.primary_goal,
+          revenue_model: asText(data.revenue_model, '')
+        });
+
+        const constraints = [
+          `max_pages=${scopeRules.max_pages}`,
+          `backend=${scopeRules.backend}`,
+          `documentation=${scopeRules.documentation}`,
+          `integration_output=${integrationRules.output}`,
+          `webhook_simulation=${integrationRules.webhook_simulation}`,
+          `forbid_api_keys=${integrationRules.forbid_api_keys}`,
+          'forbid_fabricated_credentials=true',
+          'forbid_working_webhook_urls=true'
+        ];
+
+        const header = [];
+        header.push(`PROMPT TYPE: ${data.output_engine.toUpperCase()}_MASTER_PROMPT`);
+        header.push(`BUILD_MODE: ${BUILD_MODE}`);
+        header.push(`ROLE: ${dynamic_role}`);
+        header.push(`INTEGRATION_MODE: ${JSON.stringify(integrationRules)}`);
+        header.push(`ARCHITECTURAL_INTENT:
+${architecturalIntent}`);
+        header.push(`CONSTRAINTS:
+- ${constraints.join('\n- ')}`);
+        if (configurationWarnings.length) {
+          header.push(`CONFLICT_NOTICE:
+- ${configurationWarnings.join('\n- ')}`);
+        }
+
+        const chatgptTemplate = `You are a senior full-stack web developer and conversion-focused UX engineer.
+
+MISSION:
+Build a complete multi-page website implementation strategy from this intake.
+
+DELIVERY PROTOCOL:
+1) Start coding in your first response.
+2) Deliver one page per response.
+3) Wait for the exact command "confirm" before the next page.
+4) Do not fabricate API keys, credentials, or working webhook URLs.
+
+PROJECT CONFIG:
+- Project archetype: ${data.project_archetype}
+- Delivery mode: ${data.delivery_mode}
+- Output engine: ${data.output_engine}
+- Scope preference: ${data.scope_preference}
+- Integration mode: ${data.integration_mode}
+
+INTAKE SNAPSHOT:
+- Identity type: ${data.user_type}
+- Primary goal: ${data.primary_goal}
+- Revenue model: ${asText(data.revenue_model, 'Not provided')}
+- Audience sentence: ${data.audience_sentence || 'Not provided'}
+- Desired outcomes: ${data.desired_outcomes || 'Not provided'}
+- Trust builders: ${asText(data.trust_builders, 'Not provided')}
+- Budget range: ${data.budget_range || 'Not provided'}
+- Hard deadline: ${data.hard_deadline || 'Not provided'}
+- Platform preference: ${data.platform_preference || 'Not provided'}
+- Deployment target: ${data.deployment_target || 'Not provided'}
+
+READINESS SNAPSHOT:
+- Readiness score: ${readinessNow}%
+- Risk score: ${riskScoreNow} / 100
+- Risk flags: ${riskFlagsNow.length ? riskFlagsNow.join(' | ') : 'None'}
+
+STEP-BY-STEP INTAKE SUMMARY (ALL STEPS):
+${stepStructuredSummary}
+
+FULL INTAKE FIELD MAP (ALL FORM FIELDS):
+${fullFieldMapLines}
+
+Remember: one page per response, then wait for "confirm".`;
+
+        const codexTemplate = `You are Codex operating in one-move full-build mode.
+
+MISSION:
+Deliver the complete website implementation in one response.
+
+DELIVERY PROTOCOL:
+1) Print complete file tree first.
+2) Output all required files in full.
+3) Include setup and publish instructions.
+4) Do not fabricate API keys, credentials, or working webhook URLs.
+
+PROJECT CONFIG:
+- Project archetype: ${data.project_archetype}
+- Delivery mode: ${data.delivery_mode}
+- Output engine: ${data.output_engine}
+- Scope preference: ${data.scope_preference}
+- Integration mode: ${data.integration_mode}
+
+INTAKE SNAPSHOT:
+- Identity type: ${data.user_type}
+- Primary goal: ${data.primary_goal}
+- Revenue model: ${asText(data.revenue_model, 'Not provided')}
+- Audience sentence: ${data.audience_sentence || 'Not provided'}
+- Desired outcomes: ${data.desired_outcomes || 'Not provided'}
+- Trust builders: ${asText(data.trust_builders, 'Not provided')}
+- Budget range: ${data.budget_range || 'Not provided'}
+- Hard deadline: ${data.hard_deadline || 'Not provided'}
+- Platform preference: ${data.platform_preference || 'Not provided'}
+- Deployment target: ${data.deployment_target || 'Not provided'}
+
+READINESS SNAPSHOT:
+- Readiness score: ${readinessNow}%
+- Risk score: ${riskScoreNow} / 100
+- Risk flags: ${riskFlagsNow.length ? riskFlagsNow.join(' | ') : 'None'}
+
+STEP-BY-STEP INTAKE SUMMARY (ALL STEPS):
+${stepStructuredSummary}
+
+FULL INTAKE FIELD MAP (ALL FORM FIELDS):
+${fullFieldMapLines}
+
+Remember: full site in one response, no confirm loop.`;
+
+        const buildTemplate = data.output_engine === 'codex' ? codexTemplate : chatgptTemplate;
+        return `${header.join('\n\n')}\n\n${buildTemplate}`;
+      }
+
+      async function saveSubmissionRemote(promptText) {
+        const schemaStatus = validateRequiredSchemaFields();
+        const warnings = validateConfiguration({
+          platform: val('platform_preference'),
+          deployment_target: val('deployment_target'),
+          primary_goal: val('primary_goal'),
+          revenue_model: checkedValues('revenue_model').length ? 'provided' : ''
+        });
+
+        const payload = {
+          compiler_config: {
+            project_archetype: val('project_archetype'),
+            delivery_mode: val('delivery_mode'),
+            output_engine: val('output_engine') || (promptMode ? promptMode.value : ''),
+            scope_preference: val('scope_preference'),
+            integration_mode: val('integration_mode')
+          },
+          form_values: collectDraftValues(),
+          prompt: promptText,
+          source_path: sourcePathForSubmission(),
+          contact_name: val('contact_name'),
+          contact_email: val('contact_email'),
+          website: '',
+          client_started_at: FORM_STARTED_AT,
+          client_submitted_at: Date.now(),
+          conflicts: []
+            .concat(schemaStatus.missing.map((f) => `Missing required: ${f}`))
+            .concat(schemaStatus.invalid.map((f) => `Invalid required: ${f}`))
+            .concat(warnings)
+        };
+
+        const response = await fetch(SUBMISSION_API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        let json = {};
+        try {
+          json = await response.json();
+        } catch (err) {
+          json = {};
+        }
+
+        if (!response.ok) {
+          const msg = json && json.message ? json.message : `Save failed (${response.status})`;
+          throw new Error(msg);
+        }
+
+        return json;
+      }
+
+      async function loadRemoteSubmissionByToken(token) {
+        if (!token) return false;
+        const sanitizedToken = String(token).replace(/[^A-Za-z0-9]/g, '');
+        if (!sanitizedToken) return false;
+
+        const response = await fetch(`${SUBMISSION_API_BASE}/${encodeURIComponent(sanitizedToken)}`, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Saved intake link is invalid or expired.');
+        }
+
+        const json = await response.json();
+        const values = json && json.form_values && typeof json.form_values === 'object' ? json.form_values : {};
+
+        restoringDraft = true;
+        form.reset();
+        applyDraft(values);
+        render();
+        currentIndex = Math.max(visibleSteps.length - 1, 0);
+        render();
+        restoringDraft = false;
+
+        if (json && json.prompt) {
+          masterPrompt.value = String(json.prompt);
+          resultWrap.style.display = 'block';
+        }
+
+        if (json && json.share_url) {
+          setShareLink(String(json.share_url));
+        }
+        setSubmissionStatus('Loaded saved intake from secure link.');
+        return true;
+      }
+
+      prevBtn.addEventListener('click', function () {
+        if (currentIndex > 0) {
+          currentIndex -= 1;
+          render();
+          saveDraft();
+        }
+      });
+
+      nextBtn.addEventListener('click', async function () {
+        if (!validateCurrentStep()) return;
+
+        if (currentIndex < visibleSteps.length - 1) {
+          currentIndex += 1;
+          render();
+          saveDraft();
+          return;
+        }
+
+        const schemaStatus = validateRequiredSchemaFields();
+        if (!schemaStatus.ok) {
+          const step = visibleSteps[currentIndex];
+          const missing = schemaStatus.missing.length ? `Missing: ${schemaStatus.missing.join(', ')}` : '';
+          const invalid = schemaStatus.invalid.length ? `Invalid: ${schemaStatus.invalid.join(', ')}` : '';
+          showStepError(step, `Submission rejected. Complete required compiler fields. ${missing} ${invalid}`.trim());
+          return;
+        }
+
+        try {
+          masterPrompt.value = generatePrompt();
+        } catch (err) {
+          const step = visibleSteps[currentIndex];
+          showStepError(step, err && err.message ? err.message : 'Unable to generate prompt.');
+          return;
+        }
+        resultWrap.style.display = 'block';
+        resultWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setSubmissionStatus('Saving submission to dashboard...');
+        setShareLink('');
+
+        try {
+          const result = await saveSubmissionRemote(masterPrompt.value);
+          const savedLink = result && result.share_url ? String(result.share_url) : '';
+          if (savedLink) setShareLink(savedLink);
+          if (result && result.emailed) {
+            setSubmissionStatus('Saved in dashboard and emailed to provided contact.');
+          } else {
+            setSubmissionStatus('Saved in dashboard. Add an email above to receive a copy.');
+          }
+        } catch (err) {
+          setSubmissionStatus(`Could not save to dashboard: ${err && err.message ? err.message : 'Unknown error'}`, true);
+        }
+        saveDraft();
+      });
+
+      form.addEventListener('change', function () {
+        render();
+        saveDraft();
+      });
+
+      form.addEventListener('input', function () {
+        saveDraft();
+      });
+
+      copyPromptBtn.addEventListener('click', async function () {
+        if (!masterPrompt.value) return;
+        try {
+          await navigator.clipboard.writeText(masterPrompt.value);
+          copyPromptBtn.textContent = 'Copied';
+          setTimeout(() => { copyPromptBtn.textContent = 'Copy Prompt'; }, 1400);
+        } catch (err) {
+          copyPromptBtn.textContent = 'Copy failed';
+          setTimeout(() => { copyPromptBtn.textContent = 'Copy Prompt'; }, 1400);
+        }
+      });
+
+      if (copyShareLinkBtn) {
+        copyShareLinkBtn.addEventListener('click', async function () {
+          if (!currentShareLink) return;
+          try {
+            await navigator.clipboard.writeText(currentShareLink);
+            copyShareLinkBtn.textContent = 'Link Copied';
+            setTimeout(() => { copyShareLinkBtn.textContent = 'Copy Link'; }, 1400);
+          } catch (err) {
+            copyShareLinkBtn.textContent = 'Copy Failed';
+            setTimeout(() => { copyShareLinkBtn.textContent = 'Copy Link'; }, 1400);
+          }
+        });
+      }
+
+      reviewList.addEventListener('click', function (event) {
+        const btn = event.target.closest('[data-edit-step]');
+        if (!btn) return;
+        const stepId = btn.getAttribute('data-edit-step');
+        const newIndex = visibleSteps.findIndex((step) => step.dataset.stepId === stepId);
+        if (newIndex >= 0) {
+          currentIndex = newIndex;
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          saveDraft();
+        }
+      });
+
+      resumeDraftBtn.addEventListener('click', function () {
+        resumeDraft();
+      });
+
+      clearDraftBtn.addEventListener('click', function () {
+        clearDraft();
+      });
+
+      const demoScenarios = [
+        {
+          id: 'retail_store',
+          name: 'Retail Store',
+          apply: function () {
+            setRadio('user_type', 'local_business');
+            setRadio('primary_goal', 'revenue');
+            setChecks('revenue_model', ['physical_products']);
+            setValue('audience_sentence', 'Local shoppers looking for premium in-store and online retail experiences.');
+            setValue('age_range', '25-60');
+            setValue('audience_geo', 'Houston Metro, Texas');
+            setValue('income_range', '$50k-$180k');
+            setValue('skill_level', 'beginner');
+            setValue('pain_points', 'Limited local options, inconsistent stock visibility, weak trust online');
+            setValue('desired_outcomes', 'Find products quickly, trust quality, purchase easily');
+            setValue('why_choose_you', 'Curated inventory, local reputation, and fast customer support');
+            setValue('services_list', 'In-store pickup, gift wrapping, concierge ordering');
+            setValue('services_separate_pages', 'Yes');
+            setValue('pricing_displayed', 'Yes');
+            setValue('service_packages', 'No');
+            setValue('qualification_before_booking', 'No');
+            setValue('want_case_studies', 'No');
+            setValue('primary_cta', 'buy_now');
+            setValue('secondary_cta', 'Visit store location');
+            setChecks('lead_capture', ['discount', 'email_newsletter']);
+            setValue('email_platform', 'Klaviyo');
+            setValue('email_automation_needed', 'Yes');
+            setChecks('trust_builders', ['testimonials', 'press', 'data_metrics']);
+            setValue('palette_primary', '#C0262D');
+            setValue('palette_secondary', '#F97316');
+            setValue('palette_accent', '#FACC15');
+            setValue('palette_background', '#FFF7ED');
+            setValue('palette_text', '#1F2937');
+            setValue('palette_notes', 'Warm retail palette with energetic promo accents');
+          }
+        },
+        {
+          id: 'services_site',
+          name: 'Services Site',
+          apply: function () {
+            setRadio('user_type', 'freelancer');
+            setRadio('primary_goal', 'lead_generation');
+            setChecks('revenue_model', ['services']);
+            setValue('audience_sentence', 'Business owners who need reliable website, SEO, and conversion support.');
+            setValue('age_range', '30-58');
+            setValue('audience_geo', 'United States');
+            setValue('income_range', '$70k-$250k');
+            setValue('skill_level', 'intermediate');
+            setValue('pain_points', 'Site does not convert, unclear offer structure, no growth plan');
+            setValue('desired_outcomes', 'Better lead quality, consistent pipeline, clear service packaging');
+            setValue('why_choose_you', 'Hands-on execution with measurable conversion improvements');
+            setValue('primary_content_format', 'blog');
+            setValue('posting_frequency', '2x monthly');
+            setChecks('content_features', ['pillar_cluster_seo', 'lead_magnets']);
+            setValue('services_list', 'Website strategy, page copy, SEO implementation, CRO');
+            setValue('services_separate_pages', 'Yes');
+            setValue('pricing_displayed', 'No');
+            setValue('service_packages', 'Yes');
+            setValue('qualification_before_booking', 'Yes');
+            setValue('want_case_studies', 'Yes');
+            setValue('primary_cta', 'book_call');
+            setValue('secondary_cta', 'View services guide');
+            setChecks('lead_capture', ['free_resource', 'email_newsletter']);
+            setValue('email_platform', 'HubSpot');
+            setValue('email_automation_needed', 'Yes');
+            setChecks('trust_builders', ['testimonials', 'case_studies', 'certifications']);
+            setValue('palette_primary', '#0F766E');
+            setValue('palette_secondary', '#0EA5A4');
+            setValue('palette_accent', '#2563EB');
+            setValue('palette_background', '#F8FAFC');
+            setValue('palette_text', '#0F172A');
+            setValue('palette_notes', 'Trust-focused service palette with cool professional tones');
+          }
+        },
+        {
+          id: 'blog_site',
+          name: 'Blog',
+          apply: function () {
+            setRadio('user_type', 'blogger');
+            setRadio('primary_goal', 'authority');
+            setChecks('revenue_model', ['affiliate_income', 'ads', 'digital_products']);
+            setValue('audience_sentence', 'Professionals learning AI tools and digital workflows for productivity.');
+            setValue('age_range', '22-45');
+            setValue('audience_geo', 'US, UK, Canada');
+            setValue('income_range', '$45k-$180k');
+            setValue('skill_level', 'beginner');
+            setValue('pain_points', 'Too much generic advice, unclear implementation steps, poor tool comparisons');
+            setValue('desired_outcomes', 'Practical walkthroughs, better tool choices, consistent output gains');
+            setValue('why_choose_you', 'Actionable tutorials with real examples and transparent recommendations');
+            setValue('primary_content_format', 'blog');
+            setValue('posting_frequency', '3x weekly');
+            setChecks('content_features', ['pillar_cluster_seo', 'evergreen_library', 'category_archive', 'lead_magnets']);
+            setValue('blogger_traffic_goal', '150,000 monthly sessions');
+            setValue('blogger_seo_strategy', 'Yes');
+            setValue('primary_cta', 'subscribe');
+            setValue('secondary_cta', 'Download toolkit');
+            setChecks('lead_capture', ['email_newsletter', 'free_resource']);
+            setValue('email_platform', 'ConvertKit');
+            setValue('email_automation_needed', 'Yes');
+            setChecks('trust_builders', ['press', 'data_metrics']);
+            setValue('palette_primary', '#4F46E5');
+            setValue('palette_secondary', '#7C3AED');
+            setValue('palette_accent', '#EC4899');
+            setValue('palette_background', '#EEF2FF');
+            setValue('palette_text', '#111827');
+            setValue('palette_notes', 'Editorial blog palette with strong contrast for reading hierarchy');
+          }
+        },
+        {
+          id: 'nonprofit_site',
+          name: 'Non-Profit',
+          apply: function () {
+            setRadio('user_type', 'nonprofit');
+            setRadio('primary_goal', 'fundraising');
+            setChecks('revenue_model', ['donations']);
+            setValue('audience_sentence', 'Local donors and volunteers supporting education and food security programs.');
+            setValue('age_range', '28-70');
+            setValue('audience_geo', 'Regional United States');
+            setValue('income_range', '$40k-$200k');
+            setValue('skill_level', 'beginner');
+            setValue('pain_points', 'Low trust, unclear impact visibility, fragmented donation process');
+            setValue('desired_outcomes', 'Transparent impact reporting, simple donation flow, recurring support');
+            setValue('why_choose_you', 'Documented local impact with strong accountability and community partnerships');
+            setValue('donation_system', 'Yes');
+            setValue('recurring_donations', 'Yes');
+            setValue('volunteer_form', 'Yes');
+            setValue('event_pages', 'Yes');
+            setValue('impact_reporting_page', 'Yes');
+            setValue('primary_cta', 'donate');
+            setValue('secondary_cta', 'Volunteer with us');
+            setChecks('lead_capture', ['email_newsletter']);
+            setValue('email_platform', 'Mailchimp');
+            setValue('email_automation_needed', 'Yes');
+            setChecks('trust_builders', ['testimonials', 'press', 'data_metrics']);
+            setValue('palette_primary', '#166534');
+            setValue('palette_secondary', '#15803D');
+            setValue('palette_accent', '#65A30D');
+            setValue('palette_background', '#F0FDF4');
+            setValue('palette_text', '#1F2937');
+            setValue('palette_notes', 'Mission-driven nonprofit palette emphasizing trust and impact');
+          }
+        },
+        {
+          id: 'ecommerce_variant',
+          name: 'Ecommerce Variant',
+          apply: function () {
+            setRadio('user_type', 'ecommerce');
+            setRadio('primary_goal', 'revenue');
+            setChecks('revenue_model', ['physical_products', 'digital_products', 'subscription']);
+            setValue('audience_sentence', 'Online shoppers buying premium wellness and lifestyle bundles.');
+            setValue('age_range', '21-48');
+            setValue('audience_geo', 'North America');
+            setValue('income_range', '$55k-$220k');
+            setValue('skill_level', 'beginner');
+            setValue('pain_points', 'Hard to compare products, slow checkout, no bundle incentives');
+            setValue('desired_outcomes', 'Fast purchasing, strong product trust, helpful bundle offers');
+            setValue('why_choose_you', 'Expert-curated bundles with transparent reviews and quick fulfillment');
+            setValue('product_count', '320');
+            setValue('product_categories', 'Supplements, accessories, bundles');
+            setValue('subscription_products', 'Yes');
+            setValue('inventory_tracking', 'Yes');
+            setValue('upsell_cross_sell_system', 'Yes');
+            setValue('customer_account_area', 'Yes');
+            setValue('product_reviews', 'Yes');
+            setValue('shipping_zones', 'US, Canada, UK');
+            setValue('tax_rules', 'US + VAT regions');
+            setValue('abandoned_cart_automation', 'Yes');
+            setValue('primary_cta', 'buy_now');
+            setValue('secondary_cta', 'Build your bundle');
+            setChecks('lead_capture', ['discount', 'email_newsletter']);
+            setValue('email_platform', 'Klaviyo');
+            setValue('email_automation_needed', 'Yes');
+            setChecks('trust_builders', ['testimonials', 'press', 'data_metrics']);
+            setValue('palette_primary', '#7C2D12');
+            setValue('palette_secondary', '#BE185D');
+            setValue('palette_accent', '#06B6D4');
+            setValue('palette_background', '#FFF1F2');
+            setValue('palette_text', '#111827');
+            setValue('palette_notes', 'Premium ecommerce variant palette with bold contrast accents');
+          }
+        }
+      ];
+
+      let lastDemoIndex = -1;
+
+      demoFillBtn.addEventListener('click', function () {
+        restoringDraft = true;
+        form.reset();
+        masterPrompt.value = '';
+        resultWrap.style.display = 'none';
+
+        const pickIndex = (function () {
+          if (demoScenarios.length <= 1) return 0;
+          let idx = Math.floor(Math.random() * demoScenarios.length);
+          while (idx === lastDemoIndex) idx = Math.floor(Math.random() * demoScenarios.length);
+          return idx;
+        })();
+
+        const scenario = demoScenarios[pickIndex];
+        lastDemoIndex = pickIndex;
+        scenario.apply();
+
+        if (!val('project_archetype')) setValue('project_archetype', 'local_business');
+        if (!val('delivery_mode')) setValue('delivery_mode', 'wordpress_theme');
+        if (!val('output_engine')) setValue('output_engine', promptMode ? promptMode.value : 'chatgpt');
+        if (!val('scope_preference')) setValue('scope_preference', 'standard');
+        if (!val('integration_mode')) setValue('integration_mode', 'moderate');
+
+        setValue('brand_personality_3_words', val('brand_personality_3_words') || 'credible, practical, focused');
+        setValue('theme_preference', val('theme_preference') || 'Light');
+        setValue('design_density', val('design_density') || 'Minimal');
+        setValue('animation_level', val('animation_level') || 'subtle');
+        setValue('typography_style', val('typography_style') || 'modern');
+        setValue('palette_primary', val('palette_primary') || '#0F766E');
+        setValue('palette_secondary', val('palette_secondary') || '#0E9F92');
+        setValue('palette_accent', val('palette_accent') || '#F59E0B');
+        setValue('palette_background', val('palette_background') || '#F8FAFC');
+        setValue('palette_text', val('palette_text') || '#111827');
+        setValue('palette_notes', val('palette_notes') || 'High contrast, professional, no neon colors');
+        setValue('sites_admire', val('sites_admire') || 'stripe.com, linear.app, webflow.com');
+        setValue('sites_dislike', val('sites_dislike') || 'Cluttered sites with weak hierarchy and unclear CTA');
+        setValue('platform_preference', val('platform_preference') || 'WordPress');
+        setValue('deployment_target', val('deployment_target') || 'wordpress_host');
+        setValue('hosting_mode', val('hosting_mode') || 'Self-hosted');
+        setValue('hosting_secured', val('hosting_secured') || 'Yes');
+        setValue('domain_secured', val('domain_secured') || 'Yes');
+        setValue('email_system_required', val('email_system_required') || 'Yes');
+        setValue('crm_integration', val('crm_integration') || 'HubSpot');
+        setValue('payment_gateways', val('payment_gateways') || 'Stripe');
+        setValue('membership_gating', val('membership_gating') || 'No');
+        setValue('multilingual', val('multilingual') || 'No');
+        setValue('accessibility_compliance', val('accessibility_compliance') || 'Yes');
+        setValue('analytics_setup', val('analytics_setup') || 'Yes');
+        setValue('seo_setup', val('seo_setup') || 'Yes');
+        setValue('structured_data_required', val('structured_data_required') || 'Yes');
+        setValue('goal_1y', val('goal_1y') || 'Increase measurable conversion outcomes by 3x');
+        setValue('vision_3y', val('vision_3y') || 'Scale into a repeatable growth model with stronger brand authority');
+        setValue('future_scale', val('future_scale') || 'yes');
+        if (checkedValues('future_additions').length === 0) setChecks('future_additions', ['courses', 'community']);
+        if (checkedValues('assets_ready').length === 0) setChecks('assets_ready', ['logo_svg', 'brand_guide', 'testimonials', 'analytics_access']);
+        setValue('desired_launch_date', val('desired_launch_date') || '2026-05-15');
+        setValue('hard_deadline', val('hard_deadline') || '2026-06-01');
+        setValue('budget_range', val('budget_range') || '$8,000-$20,000');
+        setValue('maintenance_required', val('maintenance_required') || 'Yes');
+        setValue('training_required', val('training_required') || 'Yes');
+
+        currentIndex = Math.max(visibleSteps.length - 1, 0);
+        render();
+        if (validateCurrentStep()) {
+          masterPrompt.value = generatePrompt();
+          resultWrap.style.display = 'block';
+          resultWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        demoFillBtn.textContent = 'Autofilled';
+        setTimeout(() => { demoFillBtn.textContent = 'Demo Autofill'; }, 1000);
+        restoringDraft = false;
+        saveDraft();
+      });
+
+      if (promptMode) {
+        if (window.location.pathname.indexOf('/website-blueprint-codex') === 0) {
+          promptMode.value = 'codex';
+        }
+
+        promptMode.addEventListener('change', function () {
+          syncOutputEngineSelectors('promptMode');
+          applyPromptModeCopy();
+          if (masterPrompt.value) {
+            masterPrompt.value = generatePrompt();
+          }
+          saveDraft();
+        });
+      }
+
+      if (outputEngine) {
+        if (!outputEngine.value && promptMode && promptMode.value) outputEngine.value = promptMode.value;
+
+        outputEngine.addEventListener('change', function () {
+          syncOutputEngineSelectors('outputEngine');
+          applyPromptModeCopy();
+          if (masterPrompt.value) {
+            masterPrompt.value = generatePrompt();
+          }
+          saveDraft();
+        });
+      }
+
+      compilerPresetButtons.forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const presetId = btn.getAttribute('data-compiler-preset');
+          setCompilerPreset(presetId);
+          syncOutputEngineSelectors('outputEngine');
+          applyPromptModeCopy();
+          render();
+          saveDraft();
+        });
+      });
+
+      summaryToggleButtons.forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const key = btn.getAttribute('data-summary-toggle');
+          const group = document.querySelector(`[data-summary-group="${key}"]`);
+          if (!group) return;
+          const collapsed = group.classList.toggle('collapsed');
+          btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        });
+      });
+
+      if (copyCompilerConfigBtn) {
+        copyCompilerConfigBtn.addEventListener('click', async function () {
+          try {
+            const payload = collectCompilerConfigForExport();
+            await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+            copyCompilerConfigBtn.textContent = 'Config Copied';
+            setTimeout(() => { copyCompilerConfigBtn.textContent = 'Copy Config JSON'; }, 1400);
+          } catch (err) {
+            copyCompilerConfigBtn.textContent = 'Copy Failed';
+            setTimeout(() => { copyCompilerConfigBtn.textContent = 'Copy Config JSON'; }, 1400);
+          }
+        });
+      }
+
+      applyPromptModeCopy();
+      render();
+
+      const tokenFromUrl = new URLSearchParams(window.location.search).get('rc_blueprint');
+      if (tokenFromUrl) {
+        setSubmissionStatus('Loading saved intake...');
+        loadRemoteSubmissionByToken(tokenFromUrl)
+          .then(function () {
+            if (window.history && window.history.replaceState) {
+              const cleanUrl = window.location.pathname + window.location.hash;
+              window.history.replaceState({}, document.title, cleanUrl);
+            }
+            saveDraft();
+          })
+          .catch(function (err) {
+            setSubmissionStatus(`Could not load saved intake: ${err && err.message ? err.message : 'Unknown error'}`, true);
+          });
+      } else if (localStorage.getItem(DRAFT_KEY)) {
+        saveDraftStatus('Saved draft available');
+      }
+    })();
+  </script>
+<script>
+(function () {
+  var lastSentHeight = 0;
+
+  function postHeight() {
+    var wrap = document.querySelector(".wrap");
+    var h = wrap ? Math.ceil(wrap.getBoundingClientRect().height) : 0;
+
+    if (!h || h < 600) return;
+    if (Math.abs(h - lastSentHeight) < 2) return;
+    lastSentHeight = h;
+
+    parent.postMessage({ type: "rcBlueprintHeight", path: location.pathname, height: h }, "*");
+  }
+
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+
+  var mo = new MutationObserver(function () { postHeight(); });
+  mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+})();
+</script>
+</body>
+</html>
